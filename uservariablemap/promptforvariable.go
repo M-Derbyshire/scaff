@@ -19,5 +19,6 @@ func PromptForVariable(varName string) (string, error) {
 	}
 
 	input = strings.TrimSuffix(input, "\n")
+	input = strings.TrimSuffix(input, "\r")
 	return input, nil
 }
