@@ -12,17 +12,20 @@ import (
 )
 
 func searchFileForCommand(filePath, commandName string) (command models.ScaffoldCommand, templatePath string, found bool) {
+
+	emptyCommand := models.ScaffoldCommand{}
+
 	fileBytes, fileErr := os.ReadFile(filePath)
 	if fileErr != nil {
 		fmt.Println(fileErr.Error())
-		return models.ScaffoldCommand{}, "", false
+		return emptyCommand, "", false
 	}
 
 	var config models.ScaffoldConfig
 	unmarshalErr := json.Unmarshal(fileBytes, &config)
 	if unmarshalErr != nil {
 		fmt.Println(unmarshalErr.Error())
-		return models.ScaffoldCommand{}, "", false
+		return emptyCommand, "", false
 	}
 
 	for _, command := range config.Commands {
@@ -32,13 +35,14 @@ func searchFileForCommand(filePath, commandName string) (command models.Scaffold
 		}
 	}
 
-	return models.ScaffoldCommand{}, "", false
+	return emptyCommand, "", false
 }
 
 // Moves up the directory tree structure (from the given "currentPath"), searching for a config file (with the given "fileNameAndExt"), until it finds
 // one that includes the correct command ("commandName").
 // Returned "foundCommand" is the ScaffoldCommand that was searched for. If the command isn't found in a file, the "found" return value is false.
-// The "templatePath" return value is the full template directory path (generated from the info in the config file)
+// The "templatePath" return value is the full template directory path (generated from the info in the config file).
+// If there are any errors reading a file, the errors will be printed.
 func FindCommand(commandName, fileNameAndExt, currentPath string) (foundCommand models.ScaffoldCommand, foundTemplatePath string, found bool) {
 
 	pathPrefix := "" //Used when constructing file path strings (different depending on OS)
