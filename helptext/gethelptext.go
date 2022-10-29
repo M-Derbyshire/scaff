@@ -19,7 +19,3 @@ You can provide multiple variables in this way. If a variable is needed, but not
 
 For full instructions on the use of SCAFF, visit https://github.com/M-Derbyshire/scaff`
 }
-
-/*
-
- */
