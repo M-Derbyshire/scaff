@@ -2,7 +2,8 @@ package uservariablemap
 
 import "strings"
 
-// When given a slice of string arguments, this will convert any argument that contains an "=" symbol into a key/value pair in the returned map
+// GenerateVariableMap when given a slice of string arguments, this will convert any argument
+// that contains an "=" symbol into a key/value pair in the returned map
 func GenerateVariableMap(args []string) map[string]string {
 
 	varMap := make(map[string]string)

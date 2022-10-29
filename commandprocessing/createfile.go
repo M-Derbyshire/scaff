@@ -8,7 +8,7 @@ import (
 	"github.com/M-Derbyshire/scaff/stringprocessing"
 )
 
-// Creates a file, based on the given FileScaffold.
+// CreateFile creates a file, based on the given FileScaffold.
 // The parentDirectoryPath is the path to the directory that will contain this file.
 // The templatesDirectoryPath is the path to the directory that contains templates (may not be the full path to the specific
 // template directory for this file -- it will be joined with the FileScaffold's TemplatePath property).

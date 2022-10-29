@@ -38,7 +38,7 @@ func searchFileForCommand(filePath, commandName string) (command models.Scaffold
 	return emptyCommand, "", false
 }
 
-// Moves up the directory tree structure (from the given "currentPath"), searching for a config file (with the given "fileNameAndExt"), until it finds
+// FindCommand moves up the directory tree structure (from the given "currentPath"), searching for a config file (with the given "fileNameAndExt"), until it finds
 // one that includes the correct command ("commandName").
 // Returned "foundCommand" is the ScaffoldCommand that was searched for. If the command isn't found in a file, the "found" return value is false.
 // The "templatePath" return value is the full template directory path (generated from the info in the config file).

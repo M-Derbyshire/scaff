@@ -7,7 +7,7 @@ import (
 	"github.com/M-Derbyshire/scaff/uservariablemap"
 )
 
-// Returns the given string with the variable tags replaced with values from the given map.
+// PopulateVariablesInString returns the given string with the variable tags replaced with values from the given map.
 // If a variable doesn't exist in the map, the user is prompted to provide it (and it is then added to the map)
 // Once done, this will replace any escaped opening braces
 func PopulateVariablesInString(text string, vars map[string]string) (string, error) {

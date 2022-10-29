@@ -9,7 +9,7 @@ import (
 	"github.com/M-Derbyshire/scaff/stringprocessing"
 )
 
-// Creates a directory (and its inner directories and files), based on the given DirectoryScaffold.
+// CreateDirectory creates a directory (and its inner directories and files), based on the given DirectoryScaffold.
 // The parentDirectoryPath is the path to the directory that will contain this directory.
 // The templatesDirectoryPath is the path to the directory that contains templates for files.
 // The vars is a map of variables that may be needed to populate the directory name.

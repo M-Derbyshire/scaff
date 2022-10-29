@@ -1,6 +1,6 @@
 package helptext
 
-// Returns the help text for the application
+// GetHelpText returns the help text for the application
 func GetHelpText() string {
 	return `Creates directories and files in the current working directory, based on the structures defined in a scaffconfig.json file (using the given variables).
 
