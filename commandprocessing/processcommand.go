@@ -8,6 +8,13 @@ import "github.com/M-Derbyshire/scaff/models"
 // The vars is a map of variables that may be needed to populate the directory/file names, and file contents.
 func ProcessCommand(command models.ScaffoldCommand, workingDirectory, templatesDirectoryPath string, vars map[string]string) error {
 
+	for _, file := range command.Files {
+		fileCreateErr := CreateFile(file, workingDirectory, templatesDirectoryPath, vars)
+		if fileCreateErr != nil {
+			return fileCreateErr
+		}
+	}
+
 	for _, directory := range command.Directories {
 		dirCreateErr := CreateDirectory(directory, workingDirectory, templatesDirectoryPath, vars)
 		if dirCreateErr != nil {

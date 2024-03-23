@@ -1,6 +1,6 @@
 # SCAFF
 
-SCAFF (shortening of "SCAFFold") is a command-line tool that allows you to predefine file/folder structures, and then generate these structures in your current working directory (whilst also utilising variable tags to populate the file/folder names -- and the file contents -- with custom values).
+SCAFF (shortening of "SCAFFold") is a command-line tool that allows you to predefine file/directory structures, and then generate these structures in your current working directory (whilst also utilising variable tags to populate the file/directory names -- and the file contents -- with custom values).
 
 ## Installing SCAFF:
 
@@ -44,6 +44,7 @@ A *scaffconfig.json* file contains a JSON object, with 2 properties:
 
 Each command object has 2 properties:
  - `name` is the name of the command.
+ - `files` is an array of file objects.
  - `directories` is an array of directory objects.
 
 Each directory object has 3 properties:
@@ -63,6 +64,12 @@ Each file object has 2 properties:
     "commands": [
         {
             "name": "cmd1",
+            "files": [
+                {
+                    "name": "{:var1:}_file.txt",
+                    "templatePath": "fileTemplate1.txt"
+                }
+            ],
             "directories": [
                 {
                     "name": "{: var1 :}_dir",
@@ -102,6 +109,7 @@ Each file object has 2 properties:
 
 Executing the `cmd1` command in the above file will generate the below files/directories in your current working directory (where var1="val1" and var2="val2"):
 
+ - `./val1_file.txt`
  - `./val1_dir`
  - `./val1_dir/my_empty_dir`
  - `./val1_dir/my_val1_file.txt`
