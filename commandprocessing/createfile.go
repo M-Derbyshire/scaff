@@ -37,7 +37,7 @@ func CreateFile(file models.FileScaffold, parentDirectoryPath, templatesDirector
 	fullFilePath := path.Join(parentDirectoryPath, populatedFileName)
 
 	// Write the file
-	writeErr := os.WriteFile(fullFilePath, []byte(populatedTemplate), 0222)
+	writeErr := os.WriteFile(fullFilePath, []byte(populatedTemplate), 0666)
 	if writeErr != nil {
 		return writeErr
 	}
