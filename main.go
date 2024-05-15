@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-
 	configFileNameAndExt := "scaffconfig.json"
 	args := os.Args[1:]
 	workingDir, wdErr := os.Getwd()
