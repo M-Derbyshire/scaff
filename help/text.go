@@ -1,7 +1,7 @@
-package helptext
+package help
 
-// GetHelpText returns the help text for the application
-func GetHelpText() string {
+// Text returns the help text for the application
+func Text() string {
 	return `Creates directories and files in the current working directory, based on the structures defined in a scaffconfig.json file (using the given variables).
 
 SCAFF [commandname] [variablename]=[variablevalue]

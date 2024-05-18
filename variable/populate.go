@@ -1,16 +1,14 @@
-package stringprocessing
+package variable
 
 import (
 	"regexp"
 	"strings"
-
-	"github.com/M-Derbyshire/scaff/uservariablemap"
 )
 
-// PopulateVariablesInString returns the given string with the variable tags replaced with values from the given map.
+// Populate returns the given string with the variable tags replaced with values from the given map.
 // If a variable doesn't exist in the map, the user is prompted to provide it (and it is then added to the map)
 // Once done, this will replace any escaped opening braces
-func PopulateVariablesInString(text string, vars map[string]string) (string, error) {
+func Populate(text string, vars map[string]string) (string, error) {
 
 	resolvedText := text
 
@@ -35,7 +33,7 @@ func PopulateVariablesInString(text string, vars map[string]string) (string, err
 		// resolve variable value
 		variableValue, varExists := vars[variableName]
 		if !varExists {
-			newVariableValue, err := uservariablemap.PromptForVariable(variableName)
+			newVariableValue, err := Prompt(variableName)
 			if err != nil {
 				return "", err
 			}

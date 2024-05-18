@@ -1,10 +1,10 @@
-package uservariablemap
+package variable
 
 import "strings"
 
-// GenerateVariableMap when given a slice of string arguments, this will convert any argument
+// Map takes a slice of string arguments, then converts any argument
 // that contains an "=" symbol into a key/value pair in the returned map
-func GenerateVariableMap(args []string) map[string]string {
+func Map(args []string) map[string]string {
 
 	varMap := make(map[string]string)
 

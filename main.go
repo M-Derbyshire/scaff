@@ -5,10 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/M-Derbyshire/scaff/commandfile"
-	"github.com/M-Derbyshire/scaff/commandprocessing"
-	"github.com/M-Derbyshire/scaff/helptext"
-	"github.com/M-Derbyshire/scaff/uservariablemap"
+	"github.com/M-Derbyshire/scaff/command"
+	"github.com/M-Derbyshire/scaff/help"
+	"github.com/M-Derbyshire/scaff/variable"
 )
 
 func main() {
@@ -27,28 +26,28 @@ func main() {
 
 	//Display help text
 	if strings.EqualFold(args[0], "--help") {
-		fmt.Println(helptext.GetHelpText())
+		fmt.Println(help.Text())
 		return
 	}
 
 	//Get the variables from the args
 	var varMap map[string]string
 	if len(args) > 1 { //first is the command name
-		varMap = uservariablemap.GenerateVariableMap(args[1:])
+		varMap = variable.Map(args[1:])
 	} else {
 		varMap = make(map[string]string)
 	}
 
 	//Look for the command
 	commandName := args[0]
-	commandToProcess, commandTemplatePath, isFound := commandfile.FindCommand(commandName, configFileNameAndExt, workingDir)
+	commandToProcess, commandTemplatePath, isFound := command.Find(commandName, configFileNameAndExt, workingDir)
 	if !isFound {
 		fmt.Println("unable to find the requested command ('" + commandName + "')")
 		return
 	}
 
 	//Process command
-	processingErr := commandprocessing.ProcessCommand(commandToProcess, workingDir, commandTemplatePath, varMap)
+	processingErr := command.Process(commandToProcess, workingDir, commandTemplatePath, varMap)
 	if processingErr != nil {
 		panic(processingErr)
 	}
