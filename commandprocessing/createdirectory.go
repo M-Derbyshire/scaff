@@ -23,7 +23,7 @@ func CreateDirectory(directory models.DirectoryScaffold, parentDirectoryPath, te
 	fullDirPath := path.Join(parentDirectoryPath, populatedDirectoryName)
 
 	//Create this directory
-	dirCreateErr := os.Mkdir(fullDirPath, 0222)
+	dirCreateErr := os.Mkdir(fullDirPath, 0777)
 	if dirCreateErr != nil {
 		return fmt.Errorf("error while creating directory '%s': %v", populatedDirectoryName, dirCreateErr.Error())
 	}
