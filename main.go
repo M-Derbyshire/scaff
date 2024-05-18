@@ -16,8 +16,7 @@ func main() {
 	args := os.Args[1:]
 	workingDir, wdErr := os.Getwd()
 	if wdErr != nil {
-		fmt.Println(wdErr.Error())
-		return
+		panic(wdErr)
 	}
 
 	// Check a command name has been given (or a flag)
@@ -51,7 +50,6 @@ func main() {
 	//Process command
 	processingErr := commandprocessing.ProcessCommand(commandToProcess, workingDir, commandTemplatePath, varMap)
 	if processingErr != nil {
-		fmt.Println(processingErr.Error())
-		return
+		panic(processingErr)
 	}
 }
