@@ -40,7 +40,10 @@ func main() {
 
 	//Look for the command
 	commandName := args[0]
-	commandToProcess, commandTemplatePath, isFound := command.Find(commandName, configFileNameAndExt, workingDir)
+	commandToProcess, commandTemplatePath, isFound, findErr := command.Find(commandName, configFileNameAndExt, workingDir)
+	if findErr != nil {
+		panic(findErr)
+	}
 	if !isFound {
 		fmt.Println("unable to find the requested command ('" + commandName + "')")
 		return
