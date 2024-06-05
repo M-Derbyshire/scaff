@@ -30,7 +30,7 @@ var (
 	mockScaffoldFileContents, _ = json.Marshal(scaffoldConfig)
 )
 
-// setup runs any setup code that is generic across all tests in the file
+// setup runs any setup code that is generic across all tests for the find func
 // (designed to be run "before each" test, rather than "before all")
 func findBeforeEach() {
 	command.CurrentOS = "windows"
