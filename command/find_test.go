@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/command"
-	"github.com/M-Derbyshire/scaff/command/command_mocks"
+	"github.com/M-Derbyshire/scaff/mocks"
 	"github.com/M-Derbyshire/scaff/models"
 )
 
@@ -31,11 +31,10 @@ var (
 )
 
 // setup runs any setup code that is generic across all tests for the find func
-// (designed to be run "before each" test, rather than "before all")
 func findBeforeEach() {
 	command.CurrentOS = "windows"
-	command.ReadFile = command_mocks.GetReadFile(mockScaffoldFileContents)
-	command.FileStat = command_mocks.GetFileStat(path.Join("C:/", commandFileNameAndExt))
+	command.ReadFile = mocks.GetReadFile(mockScaffoldFileContents)
+	command.FileStat = mocks.GetFileStat(path.Join("C:/", commandFileNameAndExt))
 }
 
 func TestFindWillFindACommandInAnyDirectoryInThePath(t *testing.T) {
@@ -54,7 +53,7 @@ func TestFindWillFindACommandInAnyDirectoryInThePath(t *testing.T) {
 	// Find should traverse up the given path (checking each parent directory).
 	// This ensures it will find a file in any directory in the given path
 	for _, dirPath := range dirPathsToTest {
-		command.FileStat = command_mocks.GetFileStat(path.Join(dirPath, commandFileNameAndExt))
+		command.FileStat = mocks.GetFileStat(path.Join(dirPath, commandFileNameAndExt))
 
 		foundCommand, _, _, err := command.Find(commandName, commandFileNameAndExt, fullDirPath)
 
@@ -81,7 +80,7 @@ func TestFindWillConstructTheCorrectTemplatePath(t *testing.T) {
 	}
 
 	for _, dirPath := range dirPathsToTest {
-		command.FileStat = command_mocks.GetFileStat(path.Join(dirPath, commandFileNameAndExt))
+		command.FileStat = mocks.GetFileStat(path.Join(dirPath, commandFileNameAndExt))
 
 		_, templateDirPath, _, _ := command.Find(commandName, commandFileNameAndExt, dirPath)
 

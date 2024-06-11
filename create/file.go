@@ -1,6 +1,7 @@
 package create
 
 import (
+	"io/fs"
 	"os"
 	"path"
 
@@ -8,16 +9,24 @@ import (
 	"github.com/M-Derbyshire/scaff/variable"
 )
 
+// These are here to make it easier to mock in tests (default values are in the init() func)
+var ReadFile func(string) ([]byte, error)
+var WriteFile func(string, []byte, fs.FileMode) error
+
+func init() {
+	ReadFile = os.ReadFile
+	WriteFile = os.WriteFile
+}
+
 // File creates a file, based on the given FileScaffold.
 // The parentDirectoryPath is the path to the directory that will contain this file.
 // The templatesDirectoryPath is the path to the directory that contains templates (may not be the full path to the specific
 // template directory for this file -- it will be joined with the FileScaffold's TemplatePath property).
 // The vars is a map of variables to populate the file and filename with.
 func File(file models.FileScaffold, parentDirectoryPath, templatesDirectoryPath string, vars map[string]string) error {
-
 	// Load template
 	fullTemplatePath := file.GetFullTemplatePath(templatesDirectoryPath)
-	templateBytes, templateErr := os.ReadFile(fullTemplatePath)
+	templateBytes, templateErr := ReadFile(fullTemplatePath)
 	if templateErr != nil {
 		return templateErr
 	}
@@ -37,7 +46,7 @@ func File(file models.FileScaffold, parentDirectoryPath, templatesDirectoryPath 
 	fullFilePath := path.Join(parentDirectoryPath, populatedFileName)
 
 	// Write the file
-	writeErr := os.WriteFile(fullFilePath, []byte(populatedTemplate), 0666)
+	writeErr := WriteFile(fullFilePath, []byte(populatedTemplate), 0666)
 	if writeErr != nil {
 		return writeErr
 	}
