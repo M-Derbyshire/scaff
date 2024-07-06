@@ -5,7 +5,6 @@ import "strings"
 // Map takes a slice of string arguments, then converts any argument
 // that contains an "=" symbol into a key/value pair in the returned map
 func Map(args []string) map[string]string {
-
 	varMap := make(map[string]string)
 
 	for _, fullArg := range args {
