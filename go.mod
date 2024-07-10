@@ -1,3 +1,3 @@
 module github.com/M-Derbyshire/scaff
 
-go 1.17
+go 1.18
