@@ -8,7 +8,7 @@ import (
 	"github.com/M-Derbyshire/scaff/variable"
 )
 
-func SetupMockStdIn(inputText string) error {
+func setupMockStdIn(inputText string) error {
 	inputBytes := []byte(inputText)
 
 	// Setup the file to act as the Stdin
@@ -33,7 +33,7 @@ func TestPromptWillReturnEnteredStringFromStdin(t *testing.T) {
 	expectedText := "my test input 123"
 	userInput := expectedText + "\n"
 
-	err := SetupMockStdIn(userInput)
+	err := setupMockStdIn(userInput)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,7 +62,7 @@ func TestPromptWillPrintPromptTextWithGivenVariableName(t *testing.T) {
 	}
 
 	// Other mocks
-	err := SetupMockStdIn("test value\n")
+	err := setupMockStdIn("test value\n")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -90,7 +90,7 @@ func TestPromptWillPrintPromptTextWithGivenVariableName(t *testing.T) {
 }
 
 func TestPromptWillReturnErrorFromReadingInput(t *testing.T) {
-	err := SetupMockStdIn("test value that's not terminated") // Value not terminated with \n, so should fail
+	err := setupMockStdIn("test value that's not terminated") // Value not terminated with \n, so should fail
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -111,7 +111,7 @@ func TestPromptWillReturnErrorFromReadingInput(t *testing.T) {
 }
 
 func TestPromptWillRemoveNewlineFromEndOfInput(t *testing.T) {
-	err := SetupMockStdIn("test value\n")
+	err := setupMockStdIn("test value\n")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -127,7 +127,7 @@ func TestPromptWillRemoveNewlineFromEndOfInput(t *testing.T) {
 }
 
 func TestPromptWillRemoveCRLFFromEndOfInput(t *testing.T) {
-	err := SetupMockStdIn("test value\r\n")
+	err := setupMockStdIn("test value\r\n")
 	if err != nil {
 		t.Fatal(err)
 	}
