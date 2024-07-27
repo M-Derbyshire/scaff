@@ -1,6 +1,7 @@
 package variable_test
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -143,5 +144,27 @@ func TestPromptWillRemoveCRLFFromEndOfInput(t *testing.T) {
 
 	if strings.HasSuffix(result, "\r\n") {
 		t.Errorf("expected result to not end with CRLF. Got string ending with CRLF")
+	}
+}
+
+func TestPromptWillRemoveSurroundingQuotes(t *testing.T) {
+	quoteValue := "\""
+
+	err := setupMockStdIn(fmt.Sprintf("%stest value%s\n", quoteValue, quoteValue))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	result, err := variable.Prompt("a")
+	if err != nil {
+		t.Errorf("expected to recieve no error. Got %e", err)
+	}
+
+	if strings.HasPrefix(result, quoteValue) {
+		t.Errorf("expected result to not start with quote. Got string starting with %s quote", quoteValue)
+	}
+
+	if strings.HasSuffix(result, quoteValue) {
+		t.Errorf("expected result to not end with quote. Got string ending with %s quote", quoteValue)
 	}
 }

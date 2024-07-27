@@ -23,7 +23,13 @@ func Prompt(varName string) (string, error) {
 		return "", err
 	}
 
+	// Remove CRLF (or might just be line feed) from end of value
 	input = strings.TrimSuffix(input, "\n")
 	input = strings.TrimSuffix(input, "\r")
+
+	// Remove surrounding quotes
+	input = strings.TrimPrefix(input, "\"")
+	input = strings.TrimSuffix(input, "\"")
+
 	return input, nil
 }
