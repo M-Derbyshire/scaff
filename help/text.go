@@ -2,14 +2,14 @@ package help
 
 // Text returns the help text for the application
 func Text() string {
-	return `Creates directories and files in the current working directory, based on the structures defined in a scaffconfig.json file (using the given variables).
+	return `Creates directories and files in the current working directory, based on the structures defined in a scaff.json file (using the given variables).
 
 SCAFF [commandname] [variablename]=[variablevalue]
 
-SCAFF will work its way up the directory-tree, from the current working directory, searching for a scaffconfig file that contains the requested command.
-For full instructions on how to structure commands in a scaffconfig.json file, visit https://github.com/M-Derbyshire/scaff
+SCAFF will work its way up the directory-tree, from the current working directory, searching for a scaff file that contains the requested command.
+For full instructions on how to structure commands in a scaff.json file, visit https://github.com/M-Derbyshire/scaff
 
-[commandname] - The name of the command (in a scaffconfig.json file) that defines the files/directories to create.
+[commandname] - The name of the command (in a scaff.json file) that defines the files/directories to create.
 [variablename]=[variablevalue] - Variables that are needed by the requested command can be defined in this format. See the below examples:
 
 var1=myValue

@@ -16,9 +16,9 @@ If the correct executable for your operating system isn't available in the `dist
 
 SCAFF creates files/directories in your current working directory, based on the "command" you have called.
 
-When you call a "command", SCAFF will start to move up the directory tree (starting from your current working directory, and ending at the root of the current drive), looking for *scaffconfig.json* files. When it finds one of these files in a directory, it will open it and check to see if it contains the requested command. If it doesn't, the process will continue until the command is found.
+When you call a "command", SCAFF will start to move up the directory tree (starting from your current working directory, and ending at the root of the current drive), looking for *scaff.json* files. When it finds one of these files in a directory, it will open it and check to see if it contains the requested command. If it doesn't, the process will continue until the command is found.
 
-So, if you were working on a project with a group of people, the root of your repository could contain a *scaffconfig.json* file (and a templates directory) with commands specific to that project. Then, further up the directory tree, you may have another *scaffconfig.json* file (say, in your user directory), that contains your personal commands.
+So, if you were working on a project with a group of people, the root of your repository could contain a *scaff.json* file (and a templates directory) with commands specific to that project. Then, further up the directory tree, you may have another *scaff.json* file (say, in your user directory), that contains your personal commands.
 
 ### Example call to a SCAFF command:
 
@@ -38,9 +38,9 @@ Variable tags start with "{:", and end with ":}". If you want to escape a tag, y
 
 ### Setting up SCAFF commands:
 
-A *scaffconfig.json* file contains a JSON object, with 2 properties:
+A *scaff.json* file contains a JSON object, with 2 properties:
  - `commands` is an array of command objects.
- - `templateDirectoryPath` is the path to the directory that contains the file templates for these commands (this path is relative to the location of the *scaffconfig.json* file).
+ - `templateDirectoryPath` is the path to the directory that contains the file templates for these commands (this path is relative to the location of the *scaff.json* file).
 
 Each command object has 2 properties:
  - `name` is the name of the command.
@@ -54,9 +54,9 @@ Each directory object has 3 properties:
 
 Each file object has 2 properties:
  - `name` is the filename (including file extension) that the file should be created with. This can contain variable tags.
- - `templatePath` is the path to the template for this file (this path is relative to the `templateDirectoryPath`, defined in the config object).
+ - `templatePath` is the path to the template for this file (this path is relative to the `templateDirectoryPath`).
 
-#### Example *scaffconfig.json* file:
+#### Example *scaff.json* file:
 
 ```
 {
@@ -115,7 +115,7 @@ Executing the `cmd1` command in the above file will generate the below files/dir
  - `./val1_dir/my_val1_file.txt`
  - `./val1_dir/my_val2_file.txt`
 
-The 2 files will be populated with the below templates (if the *scaffconfig.json* file was located in `C:/stuff`):
+The 2 files will be populated with the below templates (if the *scaff.json* file was located in `C:/stuff`):
 
 - `C:/stuff/my_templates/some_templates/fileTemplate1.txt`
 - `C:/stuff/my_templates/some_templates/fileTemplate2.txt`

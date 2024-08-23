@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	commandFileNameAndExt string                 = "scaffconfig.json"
+	commandFileNameAndExt string                 = "scaff.json"
 	commandToFind         models.ScaffoldCommand = models.ScaffoldCommand{
 		Name:        "MyTestingCommand123",
 		Files:       []models.FileScaffold{},

@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	configFileNameAndExt := "scaffconfig.json"
+	configFileNameAndExt := "scaff.json"
 	args := os.Args[1:]
 	workingDir, wdErr := os.Getwd()
 	if wdErr != nil {
