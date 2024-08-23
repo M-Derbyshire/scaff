@@ -16,7 +16,7 @@ If the correct executable for your operating system isn't available in the `dist
 
 SCAFF creates files/directories in your current working directory, based on the "command" you have called.
 
-When you call a "command", SCAFF will start to move up the directory tree (starting from your current working directory, and ending at the root of the current drive), looking for *scaff.json* files. When it finds one of these files in a directory, it will open it and check to see if it contains the requested command. If it doesn't, the process will continue until the command is found.
+When you call a "command", SCAFF will start to move up the directory tree (starting from your current working directory, and ending at the root of the current drive), looking for *scaff.json* files. When it finds one of these files in a directory, it will open it and check to see if it contains the requested command (If multiple commands are found with the same name, the first one in the array is used.). If it doesn't find the requested command in the file, the process will continue until the command is found further up the directory tree.
 
 So, if you were working on a project with a group of people, the root of your repository could contain a *scaff.json* file (and a templates directory) with commands specific to that project. Then, further up the directory tree, you may have another *scaff.json* file (say, in your user directory), that contains your personal commands.
 

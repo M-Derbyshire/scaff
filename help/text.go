@@ -6,7 +6,7 @@ func Text() string {
 
 SCAFF [commandname] [variablename]=[variablevalue]
 
-SCAFF will work its way up the directory-tree, from the current working directory, searching for a scaff file that contains the requested command.
+SCAFF will work its way up the directory-tree, from the current working directory, searching for a scaff.json file that contains the requested command (if multiple commands are found with the same name, the first one in the array is used).
 For full instructions on how to structure commands in a scaff.json file, visit https://github.com/M-Derbyshire/scaff
 
 [commandname] - The name of the command (in a scaff.json file) that defines the files/directories to create.
