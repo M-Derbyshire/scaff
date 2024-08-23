@@ -20,7 +20,7 @@ func main() {
 
 	// Check a command name has been given (or a flag)
 	if len(args) == 0 {
-		fmt.Println("please provide the name of the command to process (or use '--help')")
+		fmt.Fprintln(os.Stderr, "please provide the name of the command to process (or use '--help')")
 		os.Exit(1)
 	}
 
@@ -45,7 +45,7 @@ func main() {
 		panic(findErr)
 	}
 	if !isFound {
-		fmt.Println("unable to find the requested command ('" + commandName + "')")
+		fmt.Fprintln(os.Stderr, "unable to find the requested command ('"+commandName+"')")
 		os.Exit(3)
 	}
 
