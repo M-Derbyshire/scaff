@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	configFileNameAndExt := "scaff.json"
+	scaffFileNameAndExt := "scaff.json"
 	args := os.Args[1:]
 	workingDir, wdErr := os.Getwd()
 	if wdErr != nil {
@@ -40,7 +40,7 @@ func main() {
 
 	//Look for the command
 	commandName := args[0]
-	commandToProcess, fullTemplatePath, isFound, findErr := command.Find(commandName, configFileNameAndExt, workingDir)
+	commandToProcess, fullTemplatePath, isFound, findErr := command.Find(commandName, scaffFileNameAndExt, workingDir)
 	if findErr != nil {
 		panic(findErr)
 	}

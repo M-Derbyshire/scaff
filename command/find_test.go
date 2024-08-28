@@ -24,10 +24,10 @@ var (
 )
 
 var (
-	scaffoldConfig models.ScaffFile = models.ScaffFile{
+	scaffFile models.ScaffFile = models.ScaffFile{
 		Commands: []models.Command{commandToFind},
 	}
-	mockScaffoldFileContents, _ = json.Marshal(scaffoldConfig)
+	mockScaffoldFileContents, _ = json.Marshal(scaffFile)
 )
 
 // setup runs any setup code that is generic across all tests for the find func
