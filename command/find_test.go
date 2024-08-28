@@ -16,16 +16,16 @@ import (
 var (
 	commandFileNameAndExt string         = "scaff.json"
 	commandToFind         models.Command = models.Command{
-		Name:        "MyTestingCommand123",
-		Files:       []models.FileScaffold{},
-		Directories: []models.DirectoryScaffold{},
+		Name:                  "MyTestingCommand123",
+		Files:                 []models.FileScaffold{},
+		Directories:           []models.DirectoryScaffold{},
+		TemplateDirectoryPath: "/my_templates_1/my_templates_2",
 	}
 )
 
 var (
 	scaffoldConfig models.ScaffFile = models.ScaffFile{
-		Commands:              []models.Command{commandToFind},
-		TemplateDirectoryPath: "/my_templates_1/my_templates_2",
+		Commands: []models.Command{commandToFind},
 	}
 	mockScaffoldFileContents, _ = json.Marshal(scaffoldConfig)
 )
@@ -84,7 +84,7 @@ func TestFindWillConstructTheCorrectTemplatePath(t *testing.T) {
 
 		_, templateDirPath, _, _ := command.Find(commandName, commandFileNameAndExt, dirPath)
 
-		expectedTemplateDirPath := path.Join(dirPath, scaffoldConfig.TemplateDirectoryPath)
+		expectedTemplateDirPath := path.Join(dirPath, commandToFind.TemplateDirectoryPath)
 
 		if templateDirPath != expectedTemplateDirPath {
 			t.Errorf("expected template directory path to be '%s'. Got '%s'", expectedTemplateDirPath, templateDirPath)

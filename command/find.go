@@ -28,7 +28,7 @@ func init() {
 // value is false.
 // The "templatePath" return value is the full template directory path (generated from the info in the found file).
 // If there are any errors reading a file, the errors will be printed.
-func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.Command, foundTemplatePath string, isFound bool, err error) {
+func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.Command, fullTemplatePath string, isFound bool, err error) {
 	pathPrefix := "" //Used when constructing file path strings (different depending on OS)
 	if CurrentOS != "windows" {
 		pathPrefix = "/"
@@ -64,7 +64,7 @@ func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.
 	return command, templatePath, commandFound, searchErr
 }
 
-func searchFileForCommand(filePath, commandName string) (command models.Command, templatePath string, isFound bool, err error) {
+func searchFileForCommand(filePath, commandName string) (command models.Command, fullTemplatePath string, isFound bool, err error) {
 	emptyCommand := models.Command{}
 
 	fileBytes, fileErr := ReadFile(filePath)
@@ -72,16 +72,16 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 		return emptyCommand, "", false, fileErr
 	}
 
-	var config models.ScaffFile
-	unmarshalErr := json.Unmarshal(fileBytes, &config)
+	var scaffFile models.ScaffFile
+	unmarshalErr := json.Unmarshal(fileBytes, &scaffFile)
 	if unmarshalErr != nil {
 		return emptyCommand, "", false, unmarshalErr
 	}
 
-	for _, command := range config.Commands {
+	for _, command := range scaffFile.Commands {
 		if command.Name == commandName {
 			containingDir, _ := path.Split(filePath)
-			return command, path.Join(containingDir, config.TemplateDirectoryPath), true, nil
+			return command, path.Join(containingDir, command.TemplateDirectoryPath), true, nil
 		}
 	}
 

@@ -20,12 +20,12 @@ func init() {
 
 // File creates a file, based on the given FileScaffold.
 // The parentDirectoryPath is the path to the directory that will contain this file.
-// The templatesDirectoryPath is the path to the directory that contains templates (may not be the full path to the specific
+// The fullTemplatesDirectoryPath is the path to the directory that contains templates (may not be the full path to the specific
 // template directory for this file -- it will be joined with the FileScaffold's TemplatePath property).
 // The vars is a map of variables to populate the file and filename with.
-func File(file models.FileScaffold, parentDirectoryPath, templatesDirectoryPath string, vars map[string]string) error {
+func File(file models.FileScaffold, parentDirectoryPath, fullTemplatesDirectoryPath string, vars map[string]string) error {
 	// Load template
-	fullTemplatePath := file.GetFullTemplatePath(templatesDirectoryPath)
+	fullTemplatePath := file.GetFullTemplatePath(fullTemplatesDirectoryPath)
 	templateBytes, templateErr := ReadFile(fullTemplatePath)
 	if templateErr != nil {
 		return templateErr

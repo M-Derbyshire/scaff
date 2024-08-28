@@ -19,9 +19,9 @@ func init() {
 
 // Directory creates a directory (and its inner directories and files), based on the given DirectoryScaffold.
 // The parentDirectoryPath is the path to the directory that will contain this directory.
-// The templatesDirectoryPath is the path to the directory that contains templates for files.
+// The fullTemplatesDirectoryPath is the path to the directory that contains templates for files.
 // The vars is a map of variables that may be needed to populate the directory name.
-func Directory(directory models.DirectoryScaffold, parentDirectoryPath, templatesDirectoryPath string, vars map[string]string) error {
+func Directory(directory models.DirectoryScaffold, parentDirectoryPath, fullTemplatesDirectoryPath string, vars map[string]string) error {
 	//Generate the full path to this directory
 	populatedDirectoryName, populateNameErr := variable.Populate(directory.Name, vars)
 	if populateNameErr != nil {
@@ -37,7 +37,7 @@ func Directory(directory models.DirectoryScaffold, parentDirectoryPath, template
 
 	// Create the files within this directory
 	for _, file := range directory.Files {
-		fileCreateErr := File(file, fullDirPath, templatesDirectoryPath, vars)
+		fileCreateErr := File(file, fullDirPath, fullTemplatesDirectoryPath, vars)
 		if fileCreateErr != nil {
 			return fileCreateErr
 		}
@@ -45,7 +45,7 @@ func Directory(directory models.DirectoryScaffold, parentDirectoryPath, template
 
 	//Create the directories within this directory
 	for _, innerDirectory := range directory.Directories {
-		innerDirCreateErr := Directory(innerDirectory, fullDirPath, templatesDirectoryPath, vars)
+		innerDirCreateErr := Directory(innerDirectory, fullDirPath, fullTemplatesDirectoryPath, vars)
 		if innerDirCreateErr != nil {
 			return innerDirCreateErr
 		}

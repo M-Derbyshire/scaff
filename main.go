@@ -40,7 +40,7 @@ func main() {
 
 	//Look for the command
 	commandName := args[0]
-	commandToProcess, commandTemplatePath, isFound, findErr := command.Find(commandName, configFileNameAndExt, workingDir)
+	commandToProcess, fullTemplatePath, isFound, findErr := command.Find(commandName, configFileNameAndExt, workingDir)
 	if findErr != nil {
 		panic(findErr)
 	}
@@ -50,7 +50,7 @@ func main() {
 	}
 
 	//Process command
-	processingErr := command.Process(commandToProcess, workingDir, commandTemplatePath, varMap)
+	processingErr := command.Process(commandToProcess, workingDir, fullTemplatePath, varMap)
 	if processingErr != nil {
 		panic(processingErr)
 	}
