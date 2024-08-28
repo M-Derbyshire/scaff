@@ -18,7 +18,7 @@ type mockCreateCall struct {
 }
 
 // Command for testing process
-var processTestCommand models.ScaffoldCommand = models.ScaffoldCommand{
+var processTestCommand models.Command = models.Command{
 	Name: "testId1",
 	Files: []models.FileScaffold{
 		{

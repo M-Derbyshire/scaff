@@ -28,13 +28,13 @@ func init() {
 // value is false.
 // The "templatePath" return value is the full template directory path (generated from the info in the found file).
 // If there are any errors reading a file, the errors will be printed.
-func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.ScaffoldCommand, foundTemplatePath string, isFound bool, err error) {
+func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.Command, foundTemplatePath string, isFound bool, err error) {
 	pathPrefix := "" //Used when constructing file path strings (different depending on OS)
 	if CurrentOS != "windows" {
 		pathPrefix = "/"
 	}
 
-	var command models.ScaffoldCommand
+	var command models.Command
 	var templatePath string
 	commandFound := false
 	var searchErr error
@@ -64,15 +64,15 @@ func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.
 	return command, templatePath, commandFound, searchErr
 }
 
-func searchFileForCommand(filePath, commandName string) (command models.ScaffoldCommand, templatePath string, isFound bool, err error) {
-	emptyCommand := models.ScaffoldCommand{}
+func searchFileForCommand(filePath, commandName string) (command models.Command, templatePath string, isFound bool, err error) {
+	emptyCommand := models.Command{}
 
 	fileBytes, fileErr := ReadFile(filePath)
 	if fileErr != nil {
 		return emptyCommand, "", false, fileErr
 	}
 
-	var config models.ScaffoldConfig
+	var config models.ScaffFile
 	unmarshalErr := json.Unmarshal(fileBytes, &config)
 	if unmarshalErr != nil {
 		return emptyCommand, "", false, unmarshalErr

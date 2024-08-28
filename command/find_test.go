@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	commandFileNameAndExt string                 = "scaff.json"
-	commandToFind         models.ScaffoldCommand = models.ScaffoldCommand{
+	commandFileNameAndExt string         = "scaff.json"
+	commandToFind         models.Command = models.Command{
 		Name:        "MyTestingCommand123",
 		Files:       []models.FileScaffold{},
 		Directories: []models.DirectoryScaffold{},
@@ -23,8 +23,8 @@ var (
 )
 
 var (
-	scaffoldConfig models.ScaffoldConfig = models.ScaffoldConfig{
-		Commands:              []models.ScaffoldCommand{commandToFind},
+	scaffoldConfig models.ScaffFile = models.ScaffFile{
+		Commands:              []models.Command{commandToFind},
 		TemplateDirectoryPath: "/my_templates_1/my_templates_2",
 	}
 	mockScaffoldFileContents, _ = json.Marshal(scaffoldConfig)

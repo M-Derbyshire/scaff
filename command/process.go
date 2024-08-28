@@ -19,7 +19,7 @@ func init() {
 // The workingDirectory is the path to the current working directory
 // The templatesDirectoryPath is the path to the directory that contains templates for files.
 // The vars is a map of variables that may be needed to populate the directory/file names, and file contents.
-func Process(command models.ScaffoldCommand, workingDirectory, templatesDirectoryPath string, vars map[string]string) error {
+func Process(command models.Command, workingDirectory, templatesDirectoryPath string, vars map[string]string) error {
 	for _, file := range command.Files {
 		fileCreateErr := CreateFile(file, workingDirectory, templatesDirectoryPath, vars)
 		if fileCreateErr != nil {
