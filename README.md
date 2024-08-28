@@ -38,14 +38,14 @@ Variable tags start with "{:", and end with ":}". If you want to escape a tag, y
 
 ### Setting up SCAFF commands:
 
-A *scaff.json* file contains a JSON object, with 2 properties:
+A *scaff.json* file contains a JSON object, with 1 property:
  - `commands` is an array of command objects.
- - `templateDirectoryPath` is the path to the directory that contains the file templates for these commands (this path is relative to the location of the *scaff.json* file).
 
-Each command object has 2 properties:
+Each command object has 4 properties:
  - `name` is the name of the command.
  - `files` is an array of file objects.
  - `directories` is an array of directory objects.
+ - `templateDirectoryPath` is the path to the directory that contains the file templates for the command (this path is relative to the location of the *scaff.json* file).
 
 Each directory object has 3 properties:
  - `name` is the name that the directory should be created with. This can contain variable tags.
@@ -60,10 +60,10 @@ Each file object has 2 properties:
 
 ```
 {
-    "templateDirectoryPath": "my_templates/some_templates",
     "commands": [
         {
             "name": "cmd1",
+            "templateDirectoryPath": "my_templates/some_templates1",
             "files": [
                 {
                     "name": "{:var1:}_file.txt",
@@ -95,6 +95,7 @@ Each file object has 2 properties:
         },
         {
             "name": "cmd2",
+            "templateDirectoryPath": "my_templates/some_templates2",
             "directories": [
                 {
                     "name": "empty_dir",
@@ -117,8 +118,8 @@ Executing the `cmd1` command in the above file will generate the below files/dir
 
 The 2 files will be populated with the below templates (if the *scaff.json* file was located in `C:/stuff`):
 
-- `C:/stuff/my_templates/some_templates/fileTemplate1.txt`
-- `C:/stuff/my_templates/some_templates/fileTemplate2.txt`
+- `C:/stuff/my_templates/some_templates1/fileTemplate1.txt`
+- `C:/stuff/my_templates/some_templates1/fileTemplate2.txt`
 
 ### File templates:
 
