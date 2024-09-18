@@ -16,7 +16,7 @@ If the correct executable for your operating system isn't available in the `dist
 
 SCAFF creates files/directories in your current working directory, based on the "command" you have called.
 
-When you call a "command", SCAFF will start to move up the directory tree (starting from your current working directory, and ending at the root of the current drive), looking for *scaff.json* files. When it finds one of these files in a directory, it will open it and check to see if it contains the requested command (If multiple commands are found with the same name, the first one in the array is used.). If it doesn't find the requested command in the file, the process will continue until the command is found further up the directory tree.
+When you call a "command", SCAFF will start to move up the directory tree (starting from your current working directory, and ending at the root of the current drive), looking for *scaff.json* files. When it finds one of these files in a directory, it will open it and check to see if it contains the requested command (if it doesn't, it will also check any of the file's "children"). If it doesn't find the requested command, the process will continue until the command is found further up the directory tree.
 
 So, if you were working on a project with a group of people, the root of your repository could contain a *scaff.json* file (and a templates directory) with commands specific to that project. Then, further up the directory tree, you may have another *scaff.json* file (say, in your user directory), that contains your personal commands.
 
@@ -38,14 +38,15 @@ Variable tags start with "{:", and end with ":}". If you want to escape a tag, y
 
 ### Setting up SCAFF commands:
 
-A *scaff.json* file contains a JSON object, with 1 property:
+A *scaff.json* file contains a JSON object, with 2 properties:
  - `commands` is an array of command objects.
+ - `children` is an array of file paths (relative to the location of this *scaff.json* file). Each one is a path to a "child" scaff file. A child scaff file's contents are structured in the same way as a *scaff.json* file.
 
 Each command object has 4 properties:
  - `name` is the name of the command.
  - `files` is an array of file objects.
  - `directories` is an array of directory objects.
- - `templateDirectoryPath` is the path to the directory that contains the file templates for the command (this path is relative to the location of the *scaff.json* file).
+ - `templateDirectoryPath` is the path to a directory that contains the file templates for the command (this path is relative to the location of this *scaff.json*/child file).
 
 Each directory object has 3 properties:
  - `name` is the name that the directory should be created with. This can contain variable tags.
@@ -104,6 +105,10 @@ Each file object has 2 properties:
                 }
             ]
         }
+    ],
+    "children": [
+        "my_child_files/child_1.json",
+        "my_child_files/child_2.json"
     ]
 }
 ```

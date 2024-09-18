@@ -66,6 +66,7 @@ func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.
 
 func searchFileForCommand(filePath, commandName string) (command models.Command, fullTemplatePath string, isFound bool, err error) {
 	emptyCommand := models.Command{}
+	containingDir, _ := path.Split(filePath)
 
 	fileBytes, fileErr := ReadFile(filePath)
 	if fileErr != nil {
@@ -78,10 +79,24 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 		return emptyCommand, "", false, unmarshalErr
 	}
 
+	// Search through the commands array
 	for _, command := range scaffFile.Commands {
 		if command.Name == commandName {
-			containingDir, _ := path.Split(filePath)
 			return command, path.Join(containingDir, command.TemplateDirectoryPath), true, nil
+		}
+	}
+
+	// Search through any child files
+	for _, childPath := range scaffFile.Children {
+		fullChildPath := path.Join(containingDir, childPath)
+
+		childCommand, childTemplatePath, foundInChild, childErr := searchFileForCommand(fullChildPath, commandName)
+		if childErr != nil {
+			return emptyCommand, "", false, childErr
+		}
+
+		if foundInChild {
+			return childCommand, childTemplatePath, true, nil
 		}
 	}
 

@@ -3,6 +3,7 @@ package command_test
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/fs"
 	"path"
 	"strings"
@@ -21,21 +22,64 @@ var (
 		Directories:           []models.DirectoryScaffold{},
 		TemplateDirectoryPath: "/my_templates_1/my_templates_2",
 	}
+	commandNotToFind models.Command = models.Command{
+		Name:                  "MyOtherTestingCommand456",
+		Files:                 []models.FileScaffold{},
+		Directories:           []models.DirectoryScaffold{},
+		TemplateDirectoryPath: "/my_templates_1/",
+	}
 )
 
 var (
 	scaffFile models.ScaffFile = models.ScaffFile{
-		Commands: []models.Command{commandToFind},
+		Commands: []models.Command{commandNotToFind, commandToFind},
+		Children: []string{},
 	}
-	mockScaffoldFileContents, _ = json.Marshal(scaffFile)
+	parentScaffFile models.ScaffFile = models.ScaffFile{
+		Commands: []models.Command{},
+		Children: []string{
+			"/children/child1.json",
+			"/children/child2.json",
+		},
+	}
 )
 
 // setup runs any setup code that is generic across all tests for the find func
 func findBeforeEach() {
-	command.CurrentOS = "windows"
-	command.ReadFile = mocks.GetReadFile(mockScaffoldFileContents)
+	fileContentsJSON, _ := json.Marshal(scaffFile)
+	command.ReadFile = mocks.GetReadFile(fileContentsJSON)
 	command.FileStat = mocks.GetFileStat(path.Join("C:/", commandFileNameAndExt))
+
+	command.CurrentOS = "windows"
 }
+
+func parentFindBeforeEach() {
+	findBeforeEach()
+
+	command.ReadFile = func(filePath string) ([]byte, error) {
+		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
+			parentFileContents, _ := json.Marshal(parentScaffFile)
+			return parentFileContents, nil
+		} else if strings.HasSuffix(filePath, "children/child1.json") { // Child file without requested command
+			wrongChildFileContents, _ := json.Marshal(models.ScaffFile{
+				Commands: []models.Command{commandNotToFind},
+				Children: []string{},
+			})
+			return wrongChildFileContents, nil
+		} else if strings.HasSuffix(filePath, "children/child2.json") { // Child file with the requested command
+			rightChildFileContents, _ := json.Marshal(models.ScaffFile{
+				Commands: []models.Command{commandNotToFind, commandToFind},
+				Children: []string{},
+			})
+			return rightChildFileContents, nil
+		}
+
+		// Error if we're here
+		return nil, fmt.Errorf("An unexpected path was provided to ReadFile: %s", filePath)
+	}
+}
+
+// ---- Finding in top-level scaff-file ----------------------------------------------
 
 func TestFindWillFindACommandInAnyDirectoryInThePath(t *testing.T) {
 	findBeforeEach()
@@ -191,3 +235,125 @@ func TestFindWillAddSlashToStartOfPathWhenNotOnWindows(t *testing.T) {
 		t.Errorf("expected file path to begin with '/', but got '%s'", givenFilePath)
 	}
 }
+
+// -----------------------------------------------------------------------------------
+
+// ---- Finding in child scaff-files -------------------------------------------------
+
+func TestFindWillSearchThroughChildScaffFilesForCommand(t *testing.T) {
+	parentFindBeforeEach()
+
+	foundCommand, _, _, err := command.Find(commandToFind.Name, commandFileNameAndExt, "C:/")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if foundCommand.Name != commandToFind.Name {
+		t.Errorf("expected to recieve the correct command from find ('%s'). got '%s'", commandToFind.Name, foundCommand.Name)
+	}
+}
+
+func TestFindWillReturnErrorIfUnableToFindChildFile(t *testing.T) {
+	parentFindBeforeEach()
+
+	expectedErrorMsg := "test error 123"
+
+	command.ReadFile = func(filePath string) ([]byte, error) {
+		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
+			parentFileContents, _ := json.Marshal(parentScaffFile)
+			return parentFileContents, nil
+		} else {
+			return nil, errors.New(expectedErrorMsg)
+		}
+	}
+
+	_, _, _, err := command.Find(commandToFind.Name, commandFileNameAndExt, "C:/")
+	if err == nil {
+		t.Error("expected find to return an error, but got none")
+		return
+	}
+
+	if err.Error() != expectedErrorMsg {
+		t.Errorf("expected find to return the correct error message '%s'. got '%s'", expectedErrorMsg, err.Error())
+	}
+}
+
+func TestFindWillConstructTheCorrectTemplatePathForChildScaffFile(t *testing.T) {
+	parentFindBeforeEach()
+
+	command.FileStat = mocks.GetFileStat(path.Join("C:/my_location", commandFileNameAndExt))
+	expectedTemplatesPath := "C:/my_location/children/my_templates_1/my_templates_2"
+
+	_, resultTemplatesPath, _, err := command.Find(commandToFind.Name, commandFileNameAndExt, "C:/my_location")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if resultTemplatesPath != expectedTemplatesPath {
+		t.Errorf("expected to recieve the correct template path from find ('%s'). got '%s'", expectedTemplatesPath, resultTemplatesPath)
+	}
+}
+
+func TestFindWillReturnIsFoundAsTrueIfCommandFoundInChildScaffFile(t *testing.T) {
+	parentFindBeforeEach()
+
+	_, _, isFound, err := command.Find(commandToFind.Name, commandFileNameAndExt, "C:/")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if !isFound {
+		t.Errorf("expected find to return true for isFound value. got false")
+	}
+}
+
+func TestFindWillReturnIsFoundAsFalseIfCommandNotFoundInChildScaffFile(t *testing.T) {
+	parentFindBeforeEach()
+
+	command.ReadFile = func(filePath string) ([]byte, error) {
+		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
+			parentFileContents, _ := json.Marshal(parentScaffFile)
+			return parentFileContents, nil
+		} else {
+			childFileContents, _ := json.Marshal(models.ScaffFile{
+				Commands: []models.Command{commandNotToFind},
+				Children: []string{},
+			})
+			return childFileContents, nil
+		}
+	}
+
+	_, _, isFound, err := command.Find(commandToFind.Name, commandFileNameAndExt, "C:/")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if isFound {
+		t.Errorf("expected find to return false for isFound value. got true")
+	}
+}
+
+func TestFindWillReturnErrorIfUnableToUnmarshalJsonFromChildScaffFile(t *testing.T) {
+	parentFindBeforeEach()
+
+	command.ReadFile = func(filePath string) ([]byte, error) {
+		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
+			parentFileContents, _ := json.Marshal(parentScaffFile)
+			return parentFileContents, nil
+		} else {
+			return []byte("not valid json"), nil
+		}
+	}
+
+	_, _, _, err := command.Find(commandToFind.Name, commandFileNameAndExt, "C:/")
+	if err == nil {
+		t.Error("expected error when unmarshalling json, but recieved nil")
+		return
+	}
+}
+
+// -----------------------------------------------------------------------------------
