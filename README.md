@@ -2,6 +2,10 @@
 
 SCAFF (shortening of "SCAFFold") is a command-line tool that allows you to predefine file/directory structures, and then generate these structures in your current working directory (whilst also utilising variable tags to populate the file/directory names -- and the file contents -- with custom values).
 
+## Developing SCAFF
+
+Details and instructions for those wishing to work on developing this project can find more details [here](./development.md).
+
 ## Installing SCAFF:
 
 In the `distributions` directory, you can find the executable for your operating system. You will need to place this executable in a directory of your choice on your machine, and then add that directory to your PATH environment variable. If you don't know how to do edit your PATH variable, see one of the below articles:
