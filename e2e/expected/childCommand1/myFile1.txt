@@ -1,0 +1,4 @@
+This is my child file. It has 3 variables:
+- val1
+- val2
+- val3

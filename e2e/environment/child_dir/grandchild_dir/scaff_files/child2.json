@@ -1,0 +1,16 @@
+{
+    "commands": [
+        {
+            "name": "childCommand2",
+            "templateDirectoryPath": "child_templates/command2",
+            "files": [
+                {
+                    "name": "my_second_command.txt",
+                    "templatePath": "my_second_command.txt"
+                }
+            ],
+            "directories": []
+        }
+    ],
+    "children": []
+}

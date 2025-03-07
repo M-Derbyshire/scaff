@@ -1,0 +1,16 @@
+{
+    "commands": [
+        {
+            "name": "commandInParentDir",
+            "templateDirectoryPath": "templates",
+            "files": [
+                {
+                    "name": "commandInParent.txt",
+                    "templatePath": "commandInParent.txt"
+                }
+            ],
+            "directories": []
+        }
+    ],
+    "children": ["/scaff_files/child1.json"]
+}

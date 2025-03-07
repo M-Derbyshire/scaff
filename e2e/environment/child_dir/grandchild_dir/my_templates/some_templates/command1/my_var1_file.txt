@@ -1,0 +1,3 @@
+My {: var1 :}
+My {: var2 :}
+My {: var3 :}

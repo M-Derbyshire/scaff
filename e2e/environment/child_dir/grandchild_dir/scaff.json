@@ -1,0 +1,50 @@
+{
+    "commands": [
+        {
+            "name": "command1",
+            "templateDirectoryPath": "my_templates/some_templates/command1",
+            "files": [
+                {
+                    "name": "myFile1.txt",
+                    "templatePath": "myFile1.txt"
+                }
+            ],
+            "directories": [
+                {
+                    "name": "empty_dir",
+                    "directories": [],
+                    "files": []
+                },
+                {
+                    "name": "my_{: var3 :}_dir",
+                    "directories": [],
+                    "files": [
+                        {
+                            "name": "my_{: var1 :}_file.txt",
+                            "templatePath": "my_var1_file.txt"
+                        },
+                        {
+                            "name": "my_{: var2 :}_file.txt",
+                            "templatePath": "my_var2_file.txt"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "command2",
+            "templateDirectoryPath": "my_templates/some_templates/command2",
+            "files": [
+                {
+                    "name": "my_second_command.txt",
+                    "templatePath": "my_second_command.txt"
+                }
+            ],
+            "directories": []
+        }
+    ],
+    "children": [
+        "scaff_files/child1.json",
+        "scaff_files/child2.json"
+    ]
+}

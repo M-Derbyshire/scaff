@@ -1,0 +1,15 @@
+{
+    "commands": [
+        {
+            "name": "childCommandInParentDir",
+            "templateDirectoryPath": "templates",
+            "files": [
+                {
+                    "name": "childCommandInParent.txt",
+                    "templatePath": "childCommandInParent.txt"
+                }
+            ],
+            "directories": []
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+This is my child file. It has 3 variables:
+- {: var1 :}
+- {: var2 :}
+- {: var3 :}

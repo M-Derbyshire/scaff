@@ -1,0 +1,36 @@
+{
+    "commands": [
+        {
+            "name": "childCommand1",
+            "templateDirectoryPath": "child_templates/command1",
+            "files": [
+                {
+                    "name": "myFile1.txt",
+                    "templatePath": "myFile1.txt"
+                }
+            ],
+            "directories": [
+                {
+                    "name": "empty_dir",
+                    "directories": [],
+                    "files": []
+                },
+                {
+                    "name": "my_{: var3 :}_dir",
+                    "directories": [],
+                    "files": [
+                        {
+                            "name": "my_{: var1 :}_file.txt",
+                            "templatePath": "my_var1_file.txt"
+                        },
+                        {
+                            "name": "my_{: var2 :}_file.txt",
+                            "templatePath": "my_var2_file.txt"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "children": []
+}
