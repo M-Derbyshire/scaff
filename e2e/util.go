@@ -4,14 +4,17 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 // This file contains util functions, used when constructing the E2E tests
 
-// Runs the given shell command, from the given path, with the command arguments
-func runShellCmd(startPath, command string, commandArgs ...string) (outStr string, errStr string, err error) {
+// Runs the given shell command, from the given path, with the command arguments.
+// The inputs slice is used to respond when the app prompts the user for variable values.
+func runShellCmd(startPath, command string, inputs []string, commandArgs ...string) (outStr string, errStr string, err error) {
 	cmd := exec.Command(command, commandArgs...)
 	cmd.Dir = startPath
 
@@ -19,7 +22,28 @@ func runShellCmd(startPath, command string, commandArgs ...string) (outStr strin
 	cmd.Stdout = &outb
 	cmd.Stderr = &errb
 
-	cmdErr := cmd.Run()
+	stdinReader, stdinWriter := io.Pipe()
+	cmd.Stdin = stdinReader
+
+	err = cmd.Start()
+	if err != nil {
+		return
+	}
+
+	// Write inputs sequentially, in case the app prompts for input
+	go func() {
+		for _, input := range inputs {
+			_, writeErr := fmt.Fprintln(stdinWriter, input)
+			if writeErr != nil {
+				return
+			}
+			time.Sleep(100 * time.Millisecond) // Gives the app some time to prompt for the next input
+		}
+
+		stdinWriter.Close()
+	}()
+
+	cmdErr := cmd.Wait()
 
 	if cmdErr != nil {
 		_, wasExitErr := cmdErr.(*exec.ExitError)
@@ -39,11 +63,12 @@ var scaffoldRunPath = "./environment/child_dir/grandchild_dir/" // This is the l
 
 // Runs a scaffold command in the environment directory
 // The commandName is the name of the command in the scaff.json file.
+// The inputs slice is used to respond when the app prompts the user for variable values.
 // The args are any other arguments to pass to the app.
-func runScaffoldCommand(commandName string, args ...string) error {
+func runScaffoldCommand(commandName string, inputs []string, args ...string) error {
 	allCmdArgs := append([]string{commandName}, args...)
 
-	_, errStr, err := runShellCmd(scaffoldRunPath, "./scaff", allCmdArgs...)
+	_, errStr, err := runShellCmd(scaffoldRunPath, "./scaff", inputs, allCmdArgs...)
 	if err != nil {
 		return err
 	}
@@ -57,7 +82,7 @@ func runScaffoldCommand(commandName string, args ...string) error {
 
 // Uses the DIFF command to compare the results of a scaffold action with the expected output
 func diffScaffoldCommand(commandName string) ([]string, error) {
-	outStr, _, err := runShellCmd(".", "diff", "-r", scaffoldRunPath, fmt.Sprintf("./expected/%v", commandName))
+	outStr, _, err := runShellCmd(".", "diff", []string{}, "-r", scaffoldRunPath, fmt.Sprintf("./expected/%v", commandName))
 	if err != nil {
 		return []string{}, err
 	}

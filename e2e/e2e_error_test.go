@@ -7,7 +7,7 @@ import (
 )
 
 func TestWillPrintErrorWhenNoCommandOrFlagProvided(t *testing.T) {
-	output, errOutput, err := runShellCmd("..", "go", "run", ".")
+	output, errOutput, err := runShellCmd("..", "go", []string{}, "run", ".")
 	if err != nil {
 		t.Errorf("error while running command: %v", err.Error())
 		return
@@ -28,7 +28,7 @@ func TestWillPrintErrorIfUnableToFindRequestedCommand(t *testing.T) {
 	cmdName := "non-existant-cmd"
 	expectedErrText := fmt.Sprintf("unable to find the requested command ('%v')", cmdName)
 
-	output, errOutput, err := runShellCmd("..", "go", "run", ".", cmdName)
+	output, errOutput, err := runShellCmd("..", "go", []string{}, "run", ".", cmdName)
 
 	if err != nil {
 		t.Errorf("error while running command: %v", err.Error())
