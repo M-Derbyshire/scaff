@@ -1,1 +1,4 @@
 File from the second test command
+val1
+val2
+val3
