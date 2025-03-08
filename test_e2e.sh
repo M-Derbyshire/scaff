@@ -3,6 +3,9 @@
 # Reset the environment
 ./e2e/reset.sh
 
+# Build the app, outputted into the grandchild directory
+go build -o ./e2e/environment/child_dir/grandchild_dir .
+
 # Clear the test cache (as Go doesn't always pick up the fact that the source files have changed, when running the E2E tests)
 go clean --testcache
 
