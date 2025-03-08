@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Reset the environment
-./e2e/reset.sh
-
 # Build the app, outputted into the grandchild directory
 go build -o ./e2e/environment/child_dir/grandchild_dir .
 
@@ -15,3 +12,6 @@ if [[ $? -ne 0 ]]; then
     echo "e2e tests failed" >&2
     exit 1
 fi
+
+# Reset the environment
+./e2e/reset.sh
