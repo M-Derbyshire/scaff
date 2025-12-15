@@ -48,7 +48,9 @@ var (
 func findBeforeEach() {
 	fileContentsJSON, _ := json.Marshal(scaffFile)
 	command.ReadFile = mocks.GetReadFile(fileContentsJSON)
-	command.FileStat = mocks.GetFileStat([]string{path.Join("C:/", commandFileNameAndExt)})
+
+	mockFileInfo := mocks.CreateMockInfo(path.Join("C:/", commandFileNameAndExt), false)
+	command.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
 
 	command.CurrentOS = "windows"
 }
@@ -97,7 +99,8 @@ func TestFindWillFindACommandInAnyDirectoryInThePath(t *testing.T) {
 	// Find should traverse up the given path (checking each parent directory).
 	// This ensures it will find a file in any directory in the given path
 	for _, dirPath := range dirPathsToTest {
-		command.FileStat = mocks.GetFileStat([]string{path.Join(dirPath, commandFileNameAndExt)})
+		mockFileInfo := mocks.CreateMockInfo(path.Join(dirPath, commandFileNameAndExt), false)
+		command.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
 
 		foundCommand, _, _, err := command.Find(commandName, commandFileNameAndExt, fullDirPath)
 
@@ -124,7 +127,8 @@ func TestFindWillConstructTheCorrectTemplatePath(t *testing.T) {
 	}
 
 	for _, dirPath := range dirPathsToTest {
-		command.FileStat = mocks.GetFileStat([]string{path.Join(dirPath, commandFileNameAndExt)})
+		mockFileInfo := mocks.CreateMockInfo(path.Join(dirPath, commandFileNameAndExt), false)
+		command.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
 
 		_, templateDirPath, _, _ := command.Find(commandName, commandFileNameAndExt, dirPath)
 
@@ -282,7 +286,9 @@ func TestFindWillReturnErrorIfUnableToFindChildFile(t *testing.T) {
 func TestFindWillConstructTheCorrectTemplatePathForChildScaffFile(t *testing.T) {
 	parentFindBeforeEach()
 
-	command.FileStat = mocks.GetFileStat([]string{path.Join("C:/my_location", commandFileNameAndExt)})
+	mockFileInfo := mocks.CreateMockInfo(path.Join("C:/my_location", commandFileNameAndExt), false)
+	command.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
+
 	expectedTemplatesPath := "C:/my_location/children/my_templates_1/my_templates_2"
 
 	_, resultTemplatesPath, _, err := command.Find(commandToFind.Name, commandFileNameAndExt, "C:/my_location")
