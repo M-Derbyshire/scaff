@@ -13,9 +13,9 @@ import (
 func main() {
 	scaffFileNameAndExt := "scaff.json"
 	args := os.Args[1:]
-	workingDir, wdErr := os.Getwd()
-	if wdErr != nil {
-		panic(wdErr)
+	workingDir, err := os.Getwd()
+	if err != nil {
+		panic(err)
 	}
 
 	// Check a command name has been given (or a flag)
@@ -40,18 +40,31 @@ func main() {
 
 	//Look for the command
 	commandName := args[0]
-	commandToProcess, fullTemplatePath, isFound, findErr := command.Find(commandName, scaffFileNameAndExt, workingDir)
-	if findErr != nil {
-		panic(findErr)
+	commandToProcess, fullTemplatePath, isFound, err := command.Find(commandName, scaffFileNameAndExt, workingDir)
+	if err != nil {
+		panic(err)
 	}
 	if !isFound {
 		fmt.Fprintln(os.Stderr, "unable to find the requested command ('"+commandName+"')")
 		os.Exit(3)
 	}
 
+	// Confirm that no files/directories in the command already exist
+	existingPaths, err := command.IdentifyExistingPaths(commandToProcess, workingDir, varMap)
+	if err != nil {
+		panic(err)
+	}
+	if len(existingPaths) > 0 {
+		for _, path := range existingPaths {
+			fmt.Fprintln(os.Stderr, "path already exists:", path)
+		}
+
+		os.Exit(4)
+	}
+
 	//Process command
-	processingErr := command.Process(commandToProcess, workingDir, fullTemplatePath, varMap)
-	if processingErr != nil {
-		panic(processingErr)
+	err = command.Process(commandToProcess, workingDir, fullTemplatePath, varMap)
+	if err != nil {
+		panic(err)
 	}
 }

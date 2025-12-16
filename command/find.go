@@ -2,25 +2,11 @@ package command
 
 import (
 	"encoding/json"
-	"io/fs"
-	"os"
 	"path"
 	"regexp"
-	"runtime"
 
 	"github.com/M-Derbyshire/scaff/models"
 )
-
-// These are here to make it easier to mock in tests (default values are in the init() func)
-var ReadFile func(filePath string) ([]byte, error)
-var FileStat func(filePath string) (fs.FileInfo, error)
-var CurrentOS string
-
-func init() {
-	ReadFile = os.ReadFile
-	FileStat = os.Stat
-	CurrentOS = runtime.GOOS
-}
 
 // Find moves up the directory tree structure (from the given "currentPath"), searching for a file (with the given "fileNameAndExt"),
 // until it finds one that includes the correct command ("commandName").

@@ -4,6 +4,7 @@
 scriptDir=$(dirname "$(realpath $0)")
 mkdir -p $scriptDir/expected/command1/empty_dir
 mkdir -p $scriptDir/expected/childCommand1/empty_dir
+mkdir -p $scriptDir/expected/preexistingPaths/existing_dir_1
 
 
 

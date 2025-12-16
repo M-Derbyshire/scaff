@@ -41,6 +41,46 @@
                 }
             ],
             "directories": []
+        },
+        {
+            "name": "preexistingPaths",
+            "templateDirectoryPath": "my_templates/some_templates/command1",
+            "files": [
+                {
+                    "name": "existing_{: file :}_1.txt",
+                    "templatePath": "myFile1.txt"
+                },
+                {
+                    "name": "non_existing_file_1.txt",
+                    "templatePath": "myFile1.txt"
+                }
+            ],
+            "directories": [
+                {
+                    "name": "existing_dir_1",
+                    "directories": [],
+                    "files": []
+                },
+                {
+                    "name": "existing_dir_2",
+                    "directories": [],
+                    "files": [
+                        {
+                            "name": "existing_file_2.txt",
+                            "templatePath": "myFile1.txt"
+                        },
+                        {
+                            "name": "non_existing_file_2.txt",
+                            "templatePath": "myFile1.txt"
+                        }
+                    ]
+                },
+                {
+                    "name": "non_existing_dir_1",
+                    "directories": [],
+                    "files": []
+                }
+            ]
         }
     ],
     "children": [
