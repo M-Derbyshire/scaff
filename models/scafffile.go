@@ -1,6 +1,9 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 // Represents a file that contains a number of user-defined commands
 type ScaffFile struct {
@@ -11,4 +14,17 @@ type ScaffFile struct {
 func (sf *ScaffFile) GetInvalidJsonError() error {
 	msg := "encountered an invalid scaff file. scaff files should contain 2 properties: 'commands' (array of command objects) and 'children' (array of strings)"
 	return errors.New(msg)
+}
+
+func (sf *ScaffFile) ValidateChildrenArray() error {
+	for _, path := range sf.Children {
+		trimmedPath := strings.TrimSpace(path)
+
+		if len(trimmedPath) == 0 {
+			msg := "encountered an empty file path for a child scaff file"
+			return errors.New(msg)
+		}
+	}
+
+	return nil
 }
