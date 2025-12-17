@@ -2,6 +2,8 @@ package command
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"path"
 	"regexp"
 
@@ -62,7 +64,7 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 	var scaffFile models.ScaffFile
 	unmarshalErr := json.Unmarshal(fileBytes, &scaffFile)
 	if unmarshalErr != nil {
-		return emptyCommand, "", false, unmarshalErr
+		return emptyCommand, "", false, scaffFile.GetInvalidJsonError()
 	}
 
 	// Search through the commands array
@@ -73,8 +75,17 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 	}
 
 	// Search through any child files
+	if validationErr := scaffFile.ValidateChildrenArray(); validationErr != nil {
+		return emptyCommand, "", false, validationErr
+	}
+
 	for _, childPath := range scaffFile.Children {
 		fullChildPath := path.Join(containingDir, childPath)
+
+		if _, childPathErr := FileStat(fullChildPath); childPathErr != nil {
+			childFindErrMsg := fmt.Sprintf("unable to locate child scaff file at path: '%s'", fullChildPath)
+			return emptyCommand, "", false, errors.New(childFindErrMsg)
+		}
 
 		childCommand, childTemplatePath, foundInChild, childErr := searchFileForCommand(fullChildPath, commandName)
 		if childErr != nil {
