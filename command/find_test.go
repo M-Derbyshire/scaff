@@ -205,7 +205,7 @@ func TestFindWillReturnErrorIfUnableToUnmarshalJson(t *testing.T) {
 		return
 	}
 
-	expectedErrText := "encountered an invalid scaff file. scaff files should contain 2 properties: 'commands' (array of command objects) and 'children' (array of strings)"
+	expectedErrText := "encountered a scaff.json file with an invalid structure: 'C:/scaff.json'"
 	resultErrText := err.Error()
 	if resultErrText != expectedErrText {
 		t.Errorf("expected error text to be '%s'. got '%s'", expectedErrText, resultErrText)
@@ -427,7 +427,7 @@ func TestFindWillReturnErrorIfUnableToUnmarshalJsonFromChildScaffFile(t *testing
 		return
 	}
 
-	expectedErrText := "encountered an invalid scaff file. scaff files should contain 2 properties: 'commands' (array of command objects) and 'children' (array of strings)"
+	expectedErrText := "encountered a scaff.json file with an invalid structure: 'C:/children/child1.json'"
 	resultErrText := err.Error()
 	if resultErrText != expectedErrText {
 		t.Errorf("expected error text to be '%s'. got '%s'", expectedErrText, resultErrText)

@@ -64,7 +64,8 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 	var scaffFile models.ScaffFile
 	unmarshalErr := json.Unmarshal(fileBytes, &scaffFile)
 	if unmarshalErr != nil {
-		return emptyCommand, "", false, scaffFile.GetInvalidJsonError()
+		invalidJsonMsg := fmt.Sprintf("encountered a scaff.json file with an invalid structure: '%s'", filePath)
+		return emptyCommand, "", false, errors.New(invalidJsonMsg)
 	}
 
 	// Search through the commands array
