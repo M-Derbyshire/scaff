@@ -23,7 +23,7 @@ You can provide multiple variables in this way. If a variable is needed, but not
 
 For full instructions on the use of SCAFF, visit https://github.com/M-Derbyshire/scaff`
 
-	output, errOutput, err := runShellCmd("..", "go", []string{}, "run", ".", "--help")
+	output, errOutput, err := runShellCmd(scaffoldRunPath, "./scaff", []string{}, "--help")
 
 	if err != nil {
 		t.Errorf("error while running command: %v", err.Error())

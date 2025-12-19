@@ -1,11 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 
 	"github.com/M-Derbyshire/scaff/command"
+	"github.com/M-Derbyshire/scaff/customerrors"
 	"github.com/M-Derbyshire/scaff/help"
 	"github.com/M-Derbyshire/scaff/variable"
 )
@@ -42,11 +44,17 @@ func main() {
 	commandName := args[0]
 	commandToProcess, fullTemplatePath, isFound, err := command.Find(commandName, scaffFileNameAndExt, workingDir)
 	if err != nil {
+		var validationErr *customerrors.ValidationError
+		if errors.As(err, &validationErr) {
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(3)
+		}
+
 		panic(err)
 	}
 	if !isFound {
 		fmt.Fprintln(os.Stderr, "unable to find the requested command ('"+commandName+"')")
-		os.Exit(3)
+		os.Exit(4)
 	}
 
 	// Confirm that no files/directories in the command already exist
@@ -59,7 +67,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, "path already exists:", path)
 		}
 
-		os.Exit(4)
+		os.Exit(5)
 	}
 
 	//Process command
