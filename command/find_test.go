@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/command"
+	"github.com/M-Derbyshire/scaff/customerrors"
 	"github.com/M-Derbyshire/scaff/mocks"
 	"github.com/M-Derbyshire/scaff/models"
 )
@@ -210,6 +211,11 @@ func TestFindWillReturnErrorIfUnableToUnmarshalJson(t *testing.T) {
 	if resultErrText != expectedErrText {
 		t.Errorf("expected error text to be '%s'. got '%s'", expectedErrText, resultErrText)
 	}
+
+	var vErr *customerrors.ValidationError
+	if !errors.As(err, &vErr) {
+		t.Errorf("expected error type to be ValidationError")
+	}
 }
 
 func TestFindWillReturnValidationErrorForChildrenArray(t *testing.T) {
@@ -234,6 +240,11 @@ func TestFindWillReturnValidationErrorForChildrenArray(t *testing.T) {
 	resultErrText := err.Error()
 	if resultErrText != expectedErrText {
 		t.Errorf("expected error text to be '%s'. got '%s'", expectedErrText, resultErrText)
+	}
+
+	var vErr *customerrors.ValidationError
+	if !errors.As(err, &vErr) {
+		t.Errorf("expected error type to be ValidationError")
 	}
 }
 
@@ -432,6 +443,11 @@ func TestFindWillReturnErrorIfUnableToUnmarshalJsonFromChildScaffFile(t *testing
 	if resultErrText != expectedErrText {
 		t.Errorf("expected error text to be '%s'. got '%s'", expectedErrText, resultErrText)
 	}
+
+	var vErr *customerrors.ValidationError
+	if !errors.As(err, &vErr) {
+		t.Errorf("expected error type to be ValidationError")
+	}
 }
 
 func TestFindWillReturnValidationErrorForChildrenArrayInChildScaffFile(t *testing.T) {
@@ -464,6 +480,11 @@ func TestFindWillReturnValidationErrorForChildrenArrayInChildScaffFile(t *testin
 	resultErrText := err.Error()
 	if resultErrText != expectedErrText {
 		t.Errorf("expected error text to be '%s'. got '%s'", expectedErrText, resultErrText)
+	}
+
+	var vErr *customerrors.ValidationError
+	if !errors.As(err, &vErr) {
+		t.Errorf("expected error type to be ValidationError")
 	}
 }
 

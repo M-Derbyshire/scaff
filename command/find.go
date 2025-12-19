@@ -7,6 +7,7 @@ import (
 	"path"
 	"regexp"
 
+	"github.com/M-Derbyshire/scaff/customerrors"
 	"github.com/M-Derbyshire/scaff/models"
 )
 
@@ -64,8 +65,11 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 	var scaffFile models.ScaffFile
 	unmarshalErr := json.Unmarshal(fileBytes, &scaffFile)
 	if unmarshalErr != nil {
-		invalidJsonMsg := fmt.Sprintf("encountered a scaff.json file with an invalid structure: '%s'", filePath)
-		return emptyCommand, "", false, errors.New(invalidJsonMsg)
+		validationErr := &customerrors.ValidationError{
+			Message: fmt.Sprintf("encountered a scaff.json file with an invalid structure: '%s'", filePath),
+		}
+
+		return emptyCommand, "", false, validationErr
 	}
 
 	// Search through the commands array

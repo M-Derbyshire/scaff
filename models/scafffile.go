@@ -1,8 +1,9 @@
 package models
 
 import (
-	"errors"
 	"strings"
+
+	"github.com/M-Derbyshire/scaff/customerrors"
 )
 
 // Represents a file that contains a number of user-defined commands
@@ -17,7 +18,9 @@ func (sf *ScaffFile) ValidateChildrenArray() error {
 
 		if len(trimmedPath) == 0 {
 			msg := "encountered an empty file path for a child scaff file"
-			return errors.New(msg)
+			return &customerrors.ValidationError{
+				Message: msg,
+			}
 		}
 	}
 

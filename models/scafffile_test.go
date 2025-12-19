@@ -1,8 +1,10 @@
 package models_test
 
 import (
+	"errors"
 	"testing"
 
+	"github.com/M-Derbyshire/scaff/customerrors"
 	"github.com/M-Derbyshire/scaff/models"
 )
 
@@ -27,6 +29,11 @@ func TestScaffFileValidateChildrenArrayReturnsErrorIfEmptyChildStringFound(t *te
 	if resultMsg != expectedMsg {
 		t.Errorf("expected message to be '%s'. got '%s'", expectedMsg, resultMsg)
 	}
+
+	var vErr *customerrors.ValidationError
+	if !errors.As(result, &vErr) {
+		t.Errorf("expected error type to be ValidationError")
+	}
 }
 
 func TestScaffFileValidateChildrenArrayReturnsErrorIfChildStringIsOnlyWhitespace(t *testing.T) {
@@ -49,6 +56,11 @@ func TestScaffFileValidateChildrenArrayReturnsErrorIfChildStringIsOnlyWhitespace
 
 	if resultMsg != expectedMsg {
 		t.Errorf("expected message to be '%s'. got '%s'", expectedMsg, resultMsg)
+	}
+
+	var vErr *customerrors.ValidationError
+	if !errors.As(result, &vErr) {
+		t.Errorf("expected error type to be ValidationError")
 	}
 }
 
