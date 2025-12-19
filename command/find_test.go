@@ -361,6 +361,11 @@ func TestFindWillReturnErrorIfUnableToFindChildFile(t *testing.T) {
 	if err.Error() != expectedErrorMsg {
 		t.Errorf("expected find to return the correct error message '%s'. got '%s'", expectedErrorMsg, err.Error())
 	}
+
+	var vErr *customerrors.ValidationError
+	if !errors.As(err, &vErr) {
+		t.Errorf("expected error type to be ValidationError")
+	}
 }
 
 func TestFindWillConstructTheCorrectTemplatePathForChildScaffFile(t *testing.T) {

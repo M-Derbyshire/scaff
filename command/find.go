@@ -2,7 +2,6 @@ package command
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"path"
 	"regexp"
@@ -88,8 +87,11 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 		fullChildPath := path.Join(containingDir, childPath)
 
 		if _, childPathErr := FileStat(fullChildPath); childPathErr != nil {
-			childFindErrMsg := fmt.Sprintf("unable to locate child scaff file at path: '%s'", fullChildPath)
-			return emptyCommand, "", false, errors.New(childFindErrMsg)
+			childFindErr := &customerrors.ValidationError{
+				Message: fmt.Sprintf("unable to locate child scaff file at path: '%s'", fullChildPath),
+			}
+
+			return emptyCommand, "", false, childFindErr
 		}
 
 		childCommand, childTemplatePath, foundInChild, childErr := searchFileForCommand(fullChildPath, commandName)
