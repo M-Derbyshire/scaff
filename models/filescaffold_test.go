@@ -168,14 +168,6 @@ func TestFileScaffoldValidateWillReturnErrorIfTemplatePathDoesntExist(t *testing
 
 	expectedErr := fmt.Sprintf("unable to locate template file at path: '%s'", absTemplatePath)
 
-	models.AbsPath = func(path string) (string, error) {
-		if path == templatePath {
-			return absTemplatePath, nil
-		}
-
-		return path, nil
-	}
-
 	models.FileStat = func(filepath string) (fs.FileInfo, error) {
 		if filepath == absTemplatePath {
 			return nil, errors.New("doesn't exist")
