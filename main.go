@@ -27,7 +27,7 @@ func main() {
 	}
 
 	//Display help text
-	if strings.EqualFold(args[0], "--help") {
+	if strings.EqualFold(args[0], "--help") || strings.EqualFold(args[0], "-h") {
 		fmt.Println(help.Text())
 		return
 	}

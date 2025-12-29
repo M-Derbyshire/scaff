@@ -23,24 +23,34 @@ You can provide multiple variables in this way. If a variable is needed, but not
 
 For full instructions on the use of SCAFF, visit https://github.com/M-Derbyshire/scaff`
 
-	output, errOutput, err := runShellCmd(scaffoldRunPath, "./scaff", []string{}, "--help")
-
-	if err != nil {
-		t.Errorf("error while running command: %v", err.Error())
+	helpFlags := []string{
+		"--help",
+		"--HELP",
+		"--HelP",
+		"-h",
+		"-H",
 	}
 
-	if len(errOutput) > 0 {
-		t.Errorf("expected nothing to be output on Stderr. got '%v'", errOutput)
-	}
+	for _, helpFlag := range helpFlags {
+		output, errOutput, err := runShellCmd(scaffoldRunPath, "./scaff", []string{}, helpFlag)
 
-	preppedOutStr := strings.ReplaceAll(output, "\n", "")
-	preppedExpectedStr := strings.ReplaceAll(expectedOutText, "\n", "")
+		if err != nil {
+			t.Errorf("error while running command: %v", err.Error())
+		}
 
-	if preppedOutStr != preppedExpectedStr {
-		t.Errorf(
-			"the help text did not match the expected help text. expected:\n\n*********\n%v\n*********\n\ngot:\n\n*********\n%v\n*********",
-			expectedOutText,
-			output,
-		)
+		if len(errOutput) > 0 {
+			t.Errorf("expected nothing to be output on Stderr. got '%v'", errOutput)
+		}
+
+		preppedOutStr := strings.ReplaceAll(output, "\n", "")
+		preppedExpectedStr := strings.ReplaceAll(expectedOutText, "\n", "")
+
+		if preppedOutStr != preppedExpectedStr {
+			t.Errorf(
+				"the help text did not match the expected help text. expected:\n\n*********\n%v\n*********\n\ngot:\n\n*********\n%v\n*********",
+				expectedOutText,
+				output,
+			)
+		}
 	}
 }
