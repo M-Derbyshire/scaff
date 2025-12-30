@@ -194,6 +194,32 @@ func TestFileScaffoldValidateWillReturnErrorIfTemplatePathDoesntExist(t *testing
 	}
 }
 
+func TestFileScaffoldValidateWillNotReturnFileNotFoundErrorForTemplatePathIfPathIsInvalid(t *testing.T) {
+	expectedErr := "file scaffold objects should have a 'templatePath' property that is set to a non-empty value"
+
+	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+		return nil, errors.New("doesn't exist")
+	}
+
+	scaffold := models.FileScaffold{
+		Name:         "test.txt",
+		TemplatePath: "\t\n    ",
+	}
+
+	results := scaffold.Validate("/test")
+
+	// The empty-value error should be the only one we recieve
+	if len(results) != 1 {
+		t.Errorf("expected a single error. got %d", len(results))
+		return
+	}
+
+	resultMsg := results[0].Error()
+	if resultMsg != expectedErr {
+		t.Errorf("expected error message to be '%s'. got '%s'", expectedErr, resultMsg)
+	}
+}
+
 func TestFileScaffoldValidateWillReturnMultipleErrors(t *testing.T) {
 	expectedErrs := []string{
 		"file scaffold objects should have a 'name' property that is set to a non-empty value",

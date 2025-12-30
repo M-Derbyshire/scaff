@@ -34,22 +34,27 @@ func (fs *FileScaffold) Validate(templateDirectoryPath string) []customerrors.Va
 		errs = append(errs, newErr)
 	}
 
+	templatePathIsValid := true
 	if len(trimmedTemplatePath) == 0 {
 		newErr := customerrors.ValidationError{
 			Message: "file scaffold objects should have a 'templatePath' property that is set to a non-empty value",
 		}
 		errs = append(errs, newErr)
+
+		templatePathIsValid = false
 	}
 
-	// We want to confirm that the template file exists
-	fullTemplatePath := fs.GetFullTemplatePath(templateDirectoryPath)
+	if templatePathIsValid {
+		// We want to confirm that the template file exists
+		fullTemplatePath := fs.GetFullTemplatePath(templateDirectoryPath)
 
-	if _, pathErr := FileStat(fullTemplatePath); pathErr != nil {
-		newErr := customerrors.ValidationError{
-			Message: fmt.Sprintf("unable to locate template file at path: '%s'", fullTemplatePath),
+		if _, pathErr := FileStat(fullTemplatePath); pathErr != nil {
+			newErr := customerrors.ValidationError{
+				Message: fmt.Sprintf("unable to locate template file at path: '%s'", fullTemplatePath),
+			}
+
+			errs = append(errs, newErr)
 		}
-
-		errs = append(errs, newErr)
 	}
 
 	return errs
