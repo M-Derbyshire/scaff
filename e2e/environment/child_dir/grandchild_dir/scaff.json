@@ -81,6 +81,21 @@
                     "files": []
                 }
             ]
+        },
+        {
+            "name": "invalid_command",
+            "templateDirectoryPath": "",
+            "files": [
+                {
+                    "name": "",
+                    "templatePath": ""
+                }
+            ],
+            "directories": [
+                {
+                    "name": ""
+                }
+            ]
         }
     ],
     "children": [

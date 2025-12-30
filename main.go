@@ -57,6 +57,16 @@ func main() {
 		os.Exit(4)
 	}
 
+	// Confirm the structure of the command is valid
+	validationErrs := commandToProcess.Validate(fullTemplatePath)
+	if len(validationErrs) > 0 {
+		for _, validationErr := range validationErrs {
+			fmt.Fprintln(os.Stderr, validationErr.Error())
+		}
+
+		os.Exit(5)
+	}
+
 	// Confirm that no files/directories in the command already exist
 	existingPaths, err := command.IdentifyExistingPaths(commandToProcess, workingDir, varMap)
 	if err != nil {
@@ -67,7 +77,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, "path already exists:", path)
 		}
 
-		os.Exit(5)
+		os.Exit(6)
 	}
 
 	//Process command
