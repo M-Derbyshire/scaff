@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := build
+.DEFAULT_GOAL := build-dev
 
 fmt:
 	go fmt ./...
@@ -20,6 +20,10 @@ test-e2e:
 	./scripts/test_e2e.sh
 .PHONY:test-e2e
 
-build: vet lint
+build-dev: vet lint
 	go build .
-.PHONY:build
+.PHONY:build-dev
+
+build-prod: vet lint
+	go build -ldflags=-w .
+.PHONY:build-prod
