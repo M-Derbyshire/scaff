@@ -4,17 +4,13 @@ SCAFF (shortening of "SCAFFold") is a command-line tool that allows you to prede
 
 ## Developing SCAFF
 
-Details and instructions for those wishing to work on developing this project can find more details [here](./development.md).
+Details and instructions for those wishing to work on developing this project can find more details [here](./DEVELOPMENT.md).
 
 ## Installing SCAFF:
 
-In the `distributions` directory, you can find the executable for your operating system. You will need to place this executable in a directory of your choice on your machine, and then add that directory to your PATH environment variable. If you don't know how to do edit your PATH variable, see one of the below articles:
+First, you will need to generate the executable for your operating system (using Make, and the Go compiler). You can do this using the `make build-prod` command.
 
- - [Windows](https://www.computerhope.com/issues/ch000549.htm)
- - [Linux](https://www.howtogeek.com/658904/how-to-add-a-directory-to-your-path-in-linux/)
- - [Mac OS](https://osxdaily.com/2014/08/14/add-new-path-to-path-command-line/)
-
-If the correct executable for your operating system isn't available in the `distributions` directory, you will need to compile this yourself (using a Go compiler, and the project's makefile).
+You can then move the executable to the desired location, and add that location to your system's `PATH` environment variable.
 
 ## Using SCAFF:
 
