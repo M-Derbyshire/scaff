@@ -13,7 +13,7 @@ type DirectoryScaffold struct {
 	Directories []DirectoryScaffold `json:"directories"`
 }
 
-// Validates the properties in the DirectoryScaffold, and returns any validation errors
+// Validate validates the properties in the DirectoryScaffold, and returns any validation errors
 // The templateDirectoryPath is the root template directory for the command
 func (ds *DirectoryScaffold) Validate(templateDirectoryPath string) []customerrors.ValidationError {
 	errs := []customerrors.ValidationError{}

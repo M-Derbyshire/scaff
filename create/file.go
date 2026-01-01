@@ -9,8 +9,10 @@ import (
 	"github.com/M-Derbyshire/scaff/variable"
 )
 
-// These are here to make it easier to mock in tests (default values are in the init() func)
+// ReadFile is used to read files from the filesystem
 var ReadFile func(string) ([]byte, error)
+
+// WriteFile is used to create files in the filesystem
 var WriteFile func(string, []byte, fs.FileMode) error
 
 func init() {

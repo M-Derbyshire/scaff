@@ -8,7 +8,9 @@ import (
 )
 
 var (
-	Stdin          = os.Stdin
+	// Stdin is an open file, pointing to the standard input
+	Stdin = os.Stdin
+	// PrintFormatted is used to print a formatted string to standard output
 	PrintFormatted = fmt.Printf
 )
 

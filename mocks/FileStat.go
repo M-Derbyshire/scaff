@@ -25,13 +25,14 @@ func CreateMockInfo(path string, isDir bool) MockFileInfo {
 	}
 }
 
-// Acts as a FileInfo struct, but allows us to modify the result from the IsDir method
+// MockFileInfo acts as a FileInfo struct, but allows us to modify the result from the IsDir method
 type MockFileInfo struct {
 	fs.FileInfo
 	FilePath   string
 	isDirValue bool
 }
 
+// IsDir returns a mocked value, that identifies if the file is actually a directory
 func (mfi MockFileInfo) IsDir() bool {
 	return mfi.isDirValue
 }

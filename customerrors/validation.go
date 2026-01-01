@@ -1,6 +1,6 @@
 package customerrors
 
-// Used to represent an error that occured when validating a model's data/structure
+// ValidationError represents an error that occured when validating a model's data/structure
 type ValidationError struct {
 	Message string
 }

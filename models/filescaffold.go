@@ -19,7 +19,7 @@ func (fs *FileScaffold) GetFullTemplatePath(templateDirectoryPath string) string
 	return path.Join(templateDirectoryPath, fs.TemplatePath)
 }
 
-// Validates the properties in the FileScaffold, and returns any validation errors
+// Validate validates the properties in the FileScaffold, and returns any validation errors
 // The templateDirectoryPath is the root template directory for the command
 func (fs *FileScaffold) Validate(templateDirectoryPath string) []customerrors.ValidationError {
 	errs := []customerrors.ValidationError{}

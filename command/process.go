@@ -6,7 +6,9 @@ import (
 )
 
 var (
-	CreateFile      func(file models.FileScaffold, parentDirectoryPath, fullTemplatesDirectoryPath string, vars map[string]string) error
+	// CreateFile is used to create files in the filesystem
+	CreateFile func(file models.FileScaffold, parentDirectoryPath, fullTemplatesDirectoryPath string, vars map[string]string) error
+	// CreateDirectory is used to create directories in the filesystem
 	CreateDirectory func(directory models.DirectoryScaffold, parentDirectoryPath, fullTemplatesDirectoryPath string, vars map[string]string) error
 )
 

@@ -10,7 +10,7 @@ import (
 	"github.com/M-Derbyshire/scaff/variable"
 )
 
-// These are here to make it easier to mock in tests (default values are in the init() func)
+// Mkdir is used to create a directory in the filesystem
 var Mkdir func(string, fs.FileMode) error
 
 func init() {

@@ -6,7 +6,7 @@ import (
 	"github.com/M-Derbyshire/scaff/customerrors"
 )
 
-// Represents a user-defined command that can be executed
+// Command represents a user-defined command that can be executed
 type Command struct {
 	Name                  string              `json:"name"`
 	TemplateDirectoryPath string              `json:"templateDirectoryPath"` // This path is relative to the containing scaff-file (or child file)
@@ -14,7 +14,7 @@ type Command struct {
 	Directories           []DirectoryScaffold `json:"directories"`
 }
 
-// Validates the properties in the Command, and returns any validation errors
+// Validate validates the properties in the Command, and returns any validation errors
 // The absoluteTemplateDirPath is the root template directory for the command
 func (c *Command) Validate(absoluteTemplateDirPath string) []customerrors.ValidationError {
 	errs := []customerrors.ValidationError{}
