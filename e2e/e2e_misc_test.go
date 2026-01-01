@@ -54,3 +54,33 @@ For full instructions on the use of SCAFF, visit https://github.com/M-Derbyshire
 		}
 	}
 }
+
+func TestWillDisplayVersion(t *testing.T) {
+	expectedVersionText := "v-alpha-version"
+
+	versionFlags := []string{
+		"--version",
+		"--VERSION",
+		"--VerSIon",
+		"-v",
+		"-V",
+	}
+
+	for _, versionFlag := range versionFlags {
+		output, errOutput, err := runShellCmd(scaffoldRunPath, "./scaff", []string{}, versionFlag)
+
+		if err != nil {
+			t.Errorf("error while running command: %v", err.Error())
+		}
+
+		if len(errOutput) > 0 {
+			t.Errorf("expected nothing to be output on Stderr. got '%v'", errOutput)
+		}
+
+		preppedOutStr := strings.ReplaceAll(output, "\n", "")
+
+		if preppedOutStr != expectedVersionText {
+			t.Errorf("expected output to be '%s'. got '%s'", expectedVersionText, preppedOutStr)
+		}
+	}
+}

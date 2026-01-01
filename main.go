@@ -12,6 +12,11 @@ import (
 	"github.com/M-Derbyshire/scaff/variable"
 )
 
+var (
+	// version is the current version of the application
+	version = "-alpha-version"
+)
+
 func main() {
 	scaffFileNameAndExt := "scaff.json"
 	args := os.Args[1:]
@@ -29,6 +34,13 @@ func main() {
 	//Display help text
 	if strings.EqualFold(args[0], "--help") || strings.EqualFold(args[0], "-h") {
 		fmt.Println(help.Text())
+		return
+	}
+
+	//Display version text
+	if strings.EqualFold(args[0], "--version") || strings.EqualFold(args[0], "-v") {
+		versionText := fmt.Sprintf("v%s", version)
+		fmt.Println(versionText)
 		return
 	}
 
