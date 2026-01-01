@@ -5,7 +5,7 @@ import (
 )
 
 func e2eScaffoldBeforeEach(t *testing.T) {
-	_, _, err := runShellCmd(".", "sh", []string{}, "reset.sh")
+	_, _, err := runShellCmd(".", "bash", []string{}, "reset.sh")
 
 	if err != nil {
 		t.Errorf("error while resetting environment: %v", err.Error())
@@ -30,7 +30,7 @@ func TestWillCreateScaffoldFromCommandWithGivenVarFlags(t *testing.T) {
 	}
 
 	for _, diff := range diffs {
-		t.Errorf(diff)
+		t.Errorf("%s", diff)
 	}
 }
 
@@ -53,7 +53,7 @@ func TestScaffoldFromCommandWillPromptForVars(t *testing.T) {
 	}
 
 	for _, diff := range diffs {
-		t.Errorf(diff)
+		t.Errorf("%s", diff)
 	}
 }
 
@@ -75,7 +75,7 @@ func TestWillCreateScaffoldFromCommandInChildScaffFile(t *testing.T) {
 	}
 
 	for _, diff := range diffs {
-		t.Errorf(diff)
+		t.Errorf("%s", diff)
 	}
 }
 
@@ -109,7 +109,7 @@ func TestScaffoldCommandsWithoutUserVars(t *testing.T) {
 			}
 
 			for _, diff := range diffs {
-				t.Errorf(diff)
+				t.Errorf("%s", diff)
 			}
 		})
 	}

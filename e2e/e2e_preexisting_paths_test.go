@@ -10,11 +10,14 @@ import (
 
 // Copies over the expected files/dirs to the correct environment directory
 func setupPreexistingPathsEnvironment(t *testing.T) {
-	sourceDirPath := "./expected/preexistingPaths/*"
+	sourceDirPath := "./expected/preexistingPaths/."
 
-	_, _, err := runShellCmd(".", "cp", []string{}, "-r", sourceDirPath, scaffoldRunPath)
+	_, errStr, err := runShellCmd(".", "cp", []string{}, "-r", sourceDirPath, scaffoldRunPath)
 	if err != nil {
 		t.Errorf("error while moving pre-existing paths into environment: %v", err.Error())
+	}
+	if len(errStr) > 0 {
+		t.Errorf("error while moving pre-existing paths into environment: %s", errStr)
 	}
 }
 
@@ -66,6 +69,6 @@ func TestWillNotMakeChangesIfFilesOrDirectoriesAlreadyExist(t *testing.T) {
 	}
 
 	for _, diff := range diffs {
-		t.Errorf(diff)
+		t.Errorf("%s", diff)
 	}
 }

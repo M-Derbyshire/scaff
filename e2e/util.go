@@ -6,8 +6,11 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
+
+	"github.com/creack/pty"
 )
 
 // This file contains util functions, used when constructing the E2E tests
@@ -15,6 +18,8 @@ import (
 // Runs the given shell command, from the given path, with the command arguments.
 // The inputs slice is used to respond when the app prompts the user for variable values.
 func runShellCmd(startPath, command string, inputs []string, commandArgs ...string) (outStr string, errStr string, err error) {
+	operatingSystem := runtime.GOOS
+
 	cmd := exec.Command(command, commandArgs...)
 	cmd.Dir = startPath
 
@@ -22,26 +27,48 @@ func runShellCmd(startPath, command string, inputs []string, commandArgs ...stri
 	cmd.Stdout = &outb
 	cmd.Stderr = &errb
 
-	stdinReader, stdinWriter := io.Pipe()
-	cmd.Stdin = stdinReader
+	if operatingSystem == "windows" {
+		stdinReader, stdinWriter := io.Pipe()
+		cmd.Stdin = stdinReader
 
-	err = cmd.Start()
-	if err != nil {
-		return
-	}
-
-	// Write inputs sequentially, in case the app prompts for input
-	go func() {
-		for _, input := range inputs {
-			_, writeErr := fmt.Fprintln(stdinWriter, input)
-			if writeErr != nil {
-				return
-			}
-			time.Sleep(100 * time.Millisecond) // Gives the app some time to prompt for the next input
+		err = cmd.Start()
+		if err != nil {
+			return
 		}
 
-		stdinWriter.Close()
-	}()
+		// Write inputs sequentially, in case the app prompts for input
+		go func() {
+			for _, input := range inputs {
+				_, writeErr := fmt.Fprintln(stdinWriter, input)
+				if writeErr != nil {
+					return
+				}
+				time.Sleep(100 * time.Millisecond) // Gives the app some time to prompt for the next input
+			}
+
+			stdinWriter.Close()
+		}()
+	} else {
+		ptmx, err := pty.Start(cmd)
+		if err != nil {
+			return "", "", err
+		}
+		defer ptmx.Close()
+
+		var output bytes.Buffer
+
+		// Capture output
+		go func() {
+			io.Copy(&output, ptmx)
+		}()
+
+		// Feed inputs
+		go func() {
+			for _, input := range inputs {
+				fmt.Fprintln(ptmx, input)
+			}
+		}()
+	}
 
 	cmdErr := cmd.Wait()
 

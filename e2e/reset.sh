@@ -12,7 +12,7 @@ mkdir -p $scriptDir/expected/preexistingPaths/existing_dir_1
 ignoredNames="scaff|scaff.exe|scaff.json|scaff_files|my_templates"
 scaffoldingRunDir=$scriptDir/environment/child_dir/grandchild_dir
 
-itemPaths=($(find $scaffoldingRunDir -mindepth 1 -maxdepth 1 -print))
+mapfile -t itemPaths < <(find "$scaffoldingRunDir" -mindepth 1 -maxdepth 1 -print)
 
 for itemPath in "${itemPaths[@]}"; do
     itemNameOnly=$(basename "$itemPath")  # Extract just the file/directory name
