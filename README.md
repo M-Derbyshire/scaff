@@ -1,4 +1,4 @@
-# SCAFF
+# SCAFF (version 1.0.0)
 
 SCAFF (shortening of "SCAFFold") is a command-line tool that allows you to predefine file/directory structures, and then generate these structures in your current working directory (whilst also utilising variable tags to populate the file/directory names -- and the file contents -- with custom values).
 

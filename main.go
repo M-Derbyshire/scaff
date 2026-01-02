@@ -14,7 +14,7 @@ import (
 
 var (
 	// version is the current version of the application
-	version = "-alpha-version"
+	version = "1.0.0"
 )
 
 func main() {

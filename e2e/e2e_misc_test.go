@@ -56,7 +56,7 @@ For full instructions on the use of SCAFF, visit https://github.com/M-Derbyshire
 }
 
 func TestWillDisplayVersion(t *testing.T) {
-	expectedVersionText := "v-alpha-version"
+	expectedVersionText := "v1.0.0"
 
 	versionFlags := []string{
 		"--version",
