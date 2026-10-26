@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/create"
+	"github.com/M-Derbyshire/scaff/create/internal"
 	"github.com/M-Derbyshire/scaff/mocks"
 	"github.com/M-Derbyshire/scaff/models"
 )
@@ -18,8 +19,8 @@ var mockFileScaffold = models.FileScaffold{
 
 // setup runs any setup code that is generic across all tests for the file func
 func findBeforeEach() {
-	create.ReadFile = mocks.GetReadFile(mockTemplateData)
-	create.WriteFile = mocks.GetWriteFile()
+	internal.ReadFile = mocks.GetReadFile(mockTemplateData)
+	internal.WriteFile = mocks.GetWriteFile()
 }
 
 func TestWillLoadTheTemplateFileWithTheCorrectFilePath(t *testing.T) {
@@ -34,7 +35,7 @@ func TestWillLoadTheTemplateFileWithTheCorrectFilePath(t *testing.T) {
 
 	// We'll capture the path that ReadFile was called with
 	var resultFilePath string
-	create.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		resultFilePath = filePath
 		return nil, errors.New("test error")
 	}
@@ -50,7 +51,7 @@ func TestWillReturnErrorFromReadFileWhenReadingTheTemplateFile(t *testing.T) {
 	findBeforeEach()
 
 	expectedErrorText := "my test error 123"
-	create.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		return nil, errors.New(expectedErrorText)
 	}
 
@@ -70,7 +71,7 @@ func TestWillReturnErrorFromWriteFileWhenCreatingFile(t *testing.T) {
 	findBeforeEach()
 
 	expectedErrorText := "my test error 123"
-	create.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
+	internal.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
 		return errors.New(expectedErrorText)
 	}
 
@@ -100,7 +101,7 @@ func TestWillCreateFileWithTheCorrectFilePath(t *testing.T) {
 	findBeforeEach()
 
 	var resultFilePath string
-	create.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
+	internal.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
 		resultFilePath = name
 		return nil
 	}
@@ -128,10 +129,10 @@ func TestWillCreateFileWithTheCorrectContents(t *testing.T) {
 	findBeforeEach()
 
 	fileContents := "{: var1 :} - {: var2 :}"
-	create.ReadFile = mocks.GetReadFile([]byte(fileContents)) // Mock the template file
+	internal.ReadFile = mocks.GetReadFile([]byte(fileContents)) // Mock the template file
 
 	var resultFileContents string
-	create.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
+	internal.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
 		resultFileContents = string(data)
 		return nil
 	}
@@ -154,7 +155,7 @@ func TestWillCreateFileWithTheCorrectPermissions(t *testing.T) {
 	findBeforeEach()
 
 	var resultFilePerms fs.FileMode
-	create.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
+	internal.WriteFile = func(name string, data []byte, perm fs.FileMode) error {
 		resultFilePerms = perm
 		return nil
 	}

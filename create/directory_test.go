@@ -7,15 +7,16 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/create"
+	"github.com/M-Derbyshire/scaff/create/internal"
 	"github.com/M-Derbyshire/scaff/mocks"
 	"github.com/M-Derbyshire/scaff/models"
 )
 
 // setup runs any setup code that is generic across all tests for the directory func
 func directoryBeforeEach() {
-	create.ReadFile = mocks.GetReadFile([]byte{})
-	create.WriteFile = mocks.GetWriteFile()
-	create.Mkdir = mocks.GetMkdir()
+	internal.ReadFile = mocks.GetReadFile([]byte{})
+	internal.WriteFile = mocks.GetWriteFile()
+	internal.Mkdir = mocks.GetMkdir()
 }
 
 func TestWillCreateTheDirectoryAndFileStructure(t *testing.T) {
@@ -89,14 +90,14 @@ func TestWillCreateTheDirectoryAndFileStructure(t *testing.T) {
 
 	// We're going to record the directory paths that Mkdir is called with
 	mkdirPathCalls := make([]string, 0, len(expectedDirectoryPaths))
-	create.Mkdir = func(s string, _ fs.FileMode) error {
+	internal.Mkdir = func(s string, _ fs.FileMode) error {
 		mkdirPathCalls = append(mkdirPathCalls, s)
 		return nil
 	}
 
 	// We're going to record the file paths that WriteFile is called with
 	writeFilePathCalls := make([]string, 0, len(expectedFilePaths))
-	create.WriteFile = func(s string, _ []byte, _ fs.FileMode) error {
+	internal.WriteFile = func(s string, _ []byte, _ fs.FileMode) error {
 		writeFilePathCalls = append(writeFilePathCalls, s)
 		return nil
 	}
@@ -154,7 +155,7 @@ func TestWillPopulateDirectoryNamesWithGivenVars(t *testing.T) {
 
 	// We're going to record the directory paths that Mkdir is called with
 	mkdirPathCalls := make([]string, 0, 2)
-	create.Mkdir = func(s string, _ fs.FileMode) error {
+	internal.Mkdir = func(s string, _ fs.FileMode) error {
 		mkdirPathCalls = append(mkdirPathCalls, s)
 		return nil
 	}
@@ -202,7 +203,7 @@ func TestWillPassGivenVarsToFileCreate(t *testing.T) {
 
 	// We're going to record the file paths that WriteFile is called with
 	writeFilePathCalls := make([]string, 0, 2)
-	create.WriteFile = func(s string, _ []byte, _ fs.FileMode) error {
+	internal.WriteFile = func(s string, _ []byte, _ fs.FileMode) error {
 		writeFilePathCalls = append(writeFilePathCalls, s)
 		return nil
 	}
@@ -230,7 +231,7 @@ func TestWillCreateDirectoryWithCorrectPermissionBits(t *testing.T) {
 	}
 
 	var resultPerms fs.FileMode
-	create.Mkdir = func(_ string, perms fs.FileMode) error {
+	internal.Mkdir = func(_ string, perms fs.FileMode) error {
 		resultPerms = perms
 		return nil
 	}
@@ -273,7 +274,7 @@ func TestWillPassTemplateFilePathToFileCreate(t *testing.T) {
 
 	// We're going to record the paths that ReadFile is called with
 	readFilePathCalls := make([]string, 0, 2)
-	create.ReadFile = func(s string) ([]byte, error) {
+	internal.ReadFile = func(s string) ([]byte, error) {
 		readFilePathCalls = append(readFilePathCalls, s)
 		return []byte{}, nil
 	}
@@ -314,7 +315,7 @@ func TestWillReturnErrorFromDirectoryCreate(t *testing.T) {
 	errorMessage := "my test error"
 	expectedResultErrorMessge := "error while creating directory '/test': " + errorMessage
 
-	create.Mkdir = func(_ string, _ fs.FileMode) error {
+	internal.Mkdir = func(_ string, _ fs.FileMode) error {
 		return errors.New(errorMessage)
 	}
 
@@ -340,7 +341,7 @@ func TestWillReturnErrorFromFileCreate(t *testing.T) {
 
 	expectedErrorMessage := "my test error"
 
-	create.WriteFile = func(_ string, _ []byte, _ fs.FileMode) error {
+	internal.WriteFile = func(_ string, _ []byte, _ fs.FileMode) error {
 		return errors.New(expectedErrorMessage)
 	}
 
@@ -377,7 +378,7 @@ func TestWillReturnErrorFromInnerDirectoryCreate(t *testing.T) {
 	expectedResultErrorMessge := "error while creating directory '/test1/test2': " + errorMessage
 
 	isFirstCall := true
-	create.Mkdir = func(_ string, _ fs.FileMode) error {
+	internal.Mkdir = func(_ string, _ fs.FileMode) error {
 		// The first call is the parent directory
 		if isFirstCall {
 			isFirstCall = false

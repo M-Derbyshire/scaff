@@ -2,20 +2,12 @@ package create
 
 import (
 	"fmt"
-	"io/fs"
-	"os"
 	"path"
 
+	"github.com/M-Derbyshire/scaff/create/internal"
 	"github.com/M-Derbyshire/scaff/models"
 	"github.com/M-Derbyshire/scaff/variable"
 )
-
-// Mkdir is used to create a directory in the filesystem
-var Mkdir func(string, fs.FileMode) error
-
-func init() {
-	Mkdir = os.Mkdir
-}
 
 // Directory creates a directory (and its inner directories and files), based on the given DirectoryScaffold.
 // The parentDirectoryPath is the path to the directory that will contain this directory.
@@ -30,7 +22,7 @@ func Directory(directory models.DirectoryScaffold, parentDirectoryPath, fullTemp
 	fullDirPath := path.Join(parentDirectoryPath, populatedDirectoryName)
 
 	//Create this directory
-	dirCreateErr := Mkdir(fullDirPath, 0777)
+	dirCreateErr := internal.Mkdir(fullDirPath, 0777)
 	if dirCreateErr != nil {
 		return fmt.Errorf("error while creating directory '%s': %v", fullDirPath, dirCreateErr.Error())
 	}

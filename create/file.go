@@ -1,24 +1,12 @@
 package create
 
 import (
-	"io/fs"
-	"os"
 	"path"
 
+	"github.com/M-Derbyshire/scaff/create/internal"
 	"github.com/M-Derbyshire/scaff/models"
 	"github.com/M-Derbyshire/scaff/variable"
 )
-
-// ReadFile is used to read files from the filesystem
-var ReadFile func(string) ([]byte, error)
-
-// WriteFile is used to create files in the filesystem
-var WriteFile func(string, []byte, fs.FileMode) error
-
-func init() {
-	ReadFile = os.ReadFile
-	WriteFile = os.WriteFile
-}
 
 // File creates a file, based on the given FileScaffold.
 // The parentDirectoryPath is the path to the directory that will contain this file.
@@ -28,7 +16,7 @@ func init() {
 func File(file models.FileScaffold, parentDirectoryPath, fullTemplatesDirectoryPath string, vars map[string]string) error {
 	// Load template
 	fullTemplatePath := file.GetFullTemplatePath(fullTemplatesDirectoryPath)
-	templateBytes, templateErr := ReadFile(fullTemplatePath)
+	templateBytes, templateErr := internal.ReadFile(fullTemplatePath)
 	if templateErr != nil {
 		return templateErr
 	}
@@ -48,7 +36,7 @@ func File(file models.FileScaffold, parentDirectoryPath, fullTemplatesDirectoryP
 	fullFilePath := path.Join(parentDirectoryPath, populatedFileName)
 
 	// Write the file
-	writeErr := WriteFile(fullFilePath, []byte(populatedTemplate), 0666)
+	writeErr := internal.WriteFile(fullFilePath, []byte(populatedTemplate), 0666)
 	if writeErr != nil {
 		return writeErr
 	}
