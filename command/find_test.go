@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/command"
+	"github.com/M-Derbyshire/scaff/command/internal"
 	"github.com/M-Derbyshire/scaff/customerrors"
 	"github.com/M-Derbyshire/scaff/mocks"
 	"github.com/M-Derbyshire/scaff/models"
@@ -48,19 +49,19 @@ var (
 // setup runs any setup code that is generic across all tests for the find func
 func findBeforeEach() {
 	fileContentsJSON, _ := json.Marshal(scaffFile)
-	command.ReadFile = mocks.GetReadFile(fileContentsJSON)
+	internal.ReadFile = mocks.GetReadFile(fileContentsJSON)
 
-	command.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
-	command.CurrentOS = "windows"
+	internal.CurrentOS = "windows"
 }
 
 func parentFindBeforeEach() {
 	findBeforeEach()
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
 			parentFileContents, _ := json.Marshal(parentScaffFile)
 			return parentFileContents, nil
@@ -102,7 +103,7 @@ func TestFindWillFindACommandInAnyDirectoryInThePath(t *testing.T) {
 	// This ensures it will find a file in any directory in the given path
 	for _, dirPath := range dirPathsToTest {
 		mockFileInfo := mocks.CreateMockInfo(path.Join(dirPath, commandFileNameAndExt), false)
-		command.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
+		internal.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
 
 		foundCommand, _, _, err := command.Find(commandName, commandFileNameAndExt, fullDirPath)
 
@@ -130,7 +131,7 @@ func TestFindWillConstructTheCorrectTemplatePath(t *testing.T) {
 
 	for _, dirPath := range dirPathsToTest {
 		mockFileInfo := mocks.CreateMockInfo(path.Join(dirPath, commandFileNameAndExt), false)
-		command.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
+		internal.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{mockFileInfo})
 
 		_, templateDirPath, _, _ := command.Find(commandName, commandFileNameAndExt, dirPath)
 
@@ -177,7 +178,7 @@ func TestFindWillReturnErrorIfUnableToReadFile(t *testing.T) {
 
 	expectedErrText := "my test error 123"
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		return nil, errors.New(expectedErrText)
 	}
 
@@ -195,7 +196,7 @@ func TestFindWillReturnErrorIfUnableToReadFile(t *testing.T) {
 func TestFindWillReturnErrorIfUnableToUnmarshalJson(t *testing.T) {
 	findBeforeEach()
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		return []byte("not valid json"), nil
 	}
 
@@ -227,7 +228,7 @@ func TestFindWillReturnValidationErrorForChildrenArray(t *testing.T) {
 	}
 
 	fileContentsJSON, _ := json.Marshal(testFile)
-	command.ReadFile = mocks.GetReadFile(fileContentsJSON)
+	internal.ReadFile = mocks.GetReadFile(fileContentsJSON)
 
 	_, _, _, err := command.Find(commandNotToFind.Name, commandFileNameAndExt, "C:/")
 
@@ -256,7 +257,7 @@ func TestFindWillNotReturnValidationErrorIfNoCommandsArray(t *testing.T) {
 	}
 
 	fileContentsJSON, _ := json.Marshal(testFile)
-	command.ReadFile = mocks.GetReadFile(fileContentsJSON)
+	internal.ReadFile = mocks.GetReadFile(fileContentsJSON)
 
 	_, _, _, err := command.Find(commandNotToFind.Name, commandFileNameAndExt, "C:/")
 
@@ -274,7 +275,7 @@ func TestFindWillNotReturnValidationErrorIfNoChildrenArray(t *testing.T) {
 	}
 
 	fileContentsJSON, _ := json.Marshal(testFile)
-	command.ReadFile = mocks.GetReadFile(fileContentsJSON)
+	internal.ReadFile = mocks.GetReadFile(fileContentsJSON)
 
 	_, _, _, err := command.Find(commandNotToFind.Name, commandFileNameAndExt, "C:/")
 
@@ -288,7 +289,7 @@ func TestFindWontAddSlashToStartOfPathWhenOnWindows(t *testing.T) {
 	findBeforeEach()
 
 	givenFilePath := ""
-	command.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		givenFilePath = filepath
 		return nil, nil
 	}
@@ -305,12 +306,12 @@ func TestFindWillAddSlashToStartOfPathWhenNotOnWindows(t *testing.T) {
 	findBeforeEach()
 
 	givenFilePath := ""
-	command.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		givenFilePath = filepath
 		return nil, nil
 	}
 
-	command.CurrentOS = "not-windows"
+	internal.CurrentOS = "not-windows"
 
 	originalPath := "test/test2"
 	command.Find(commandToFind.Name, commandFileNameAndExt, originalPath)
@@ -344,7 +345,7 @@ func TestFindWillReturnErrorIfUnableToFindChildFile(t *testing.T) {
 	childPathToFind := parentScaffFile.Children[0]
 	expectedErrorMsg := fmt.Sprintf("unable to locate child scaff file at path: 'C:%s'", childPathToFind)
 
-	command.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		if strings.HasSuffix(filepath, childPathToFind) {
 			return nil, errors.New("my error msg")
 		}
@@ -401,7 +402,7 @@ func TestFindWillReturnIsFoundAsTrueIfCommandFoundInChildScaffFile(t *testing.T)
 func TestFindWillReturnIsFoundAsFalseIfCommandNotFoundInChildScaffFile(t *testing.T) {
 	parentFindBeforeEach()
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
 			parentFileContents, _ := json.Marshal(parentScaffFile)
 			return parentFileContents, nil
@@ -428,7 +429,7 @@ func TestFindWillReturnIsFoundAsFalseIfCommandNotFoundInChildScaffFile(t *testin
 func TestFindWillReturnErrorIfUnableToUnmarshalJsonFromChildScaffFile(t *testing.T) {
 	parentFindBeforeEach()
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
 			parentFileContents, _ := json.Marshal(parentScaffFile)
 			return parentFileContents, nil
@@ -465,7 +466,7 @@ func TestFindWillReturnValidationErrorForChildrenArrayInChildScaffFile(t *testin
 
 	fileContentsJSON, _ := json.Marshal(testFile)
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
 			parentFileContents, _ := json.Marshal(parentScaffFile)
 			return parentFileContents, nil
@@ -502,7 +503,7 @@ func TestFindWillNotReturnValidationErrorIfNoCommandsArrayInChildScaffFile(t *te
 
 	fileContentsJSON, _ := json.Marshal(testFile)
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
 			parentFileContents, _ := json.Marshal(parentScaffFile)
 			return parentFileContents, nil
@@ -528,7 +529,7 @@ func TestFindWillNotReturnValidationErrorIfNoChildrenArrayInChildScaffFile(t *te
 
 	fileContentsJSON, _ := json.Marshal(testFile)
 
-	command.ReadFile = func(filePath string) ([]byte, error) {
+	internal.ReadFile = func(filePath string) ([]byte, error) {
 		if strings.HasSuffix(filePath, commandFileNameAndExt) { // Parent scaff-file
 			parentFileContents, _ := json.Marshal(parentScaffFile)
 			return parentFileContents, nil

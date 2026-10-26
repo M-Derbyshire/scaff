@@ -3,6 +3,7 @@ package command
 import (
 	"path/filepath"
 
+	"github.com/M-Derbyshire/scaff/command/internal"
 	"github.com/M-Derbyshire/scaff/models"
 	"github.com/M-Derbyshire/scaff/variable"
 )
@@ -21,7 +22,7 @@ func IdentifyExistingPaths(command models.Command, workingDirectory string, vars
 
 		filePathToCheck := filepath.Join(workingDirectory, populatedName)
 
-		if fileInfo, _ := FileStat(filePathToCheck); fileInfo != nil && !fileInfo.IsDir() {
+		if fileInfo, _ := internal.FileStat(filePathToCheck); fileInfo != nil && !fileInfo.IsDir() {
 			results = append(results, filePathToCheck)
 		}
 	}
@@ -35,7 +36,7 @@ func IdentifyExistingPaths(command models.Command, workingDirectory string, vars
 
 		directoryPathToCheck := filepath.Join(workingDirectory, populatedName)
 
-		if dirInfo, _ := FileStat(directoryPathToCheck); dirInfo != nil && dirInfo.IsDir() {
+		if dirInfo, _ := internal.FileStat(directoryPathToCheck); dirInfo != nil && dirInfo.IsDir() {
 			results = append(results, directoryPathToCheck)
 		}
 	}

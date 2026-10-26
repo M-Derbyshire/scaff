@@ -6,6 +6,7 @@ import (
 	"path"
 	"regexp"
 
+	"github.com/M-Derbyshire/scaff/command/internal"
 	"github.com/M-Derbyshire/scaff/customerrors"
 	"github.com/M-Derbyshire/scaff/models"
 )
@@ -18,7 +19,7 @@ import (
 // If there are any errors reading a file, the errors will be printed.
 func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.Command, fullTemplatePath string, isFound bool, err error) {
 	pathPrefix := "" //Used when constructing file path strings (different depending on OS)
-	if CurrentOS != "windows" {
+	if internal.CurrentOS != "windows" {
 		pathPrefix = "/"
 	}
 
@@ -36,7 +37,7 @@ func Find(commandName, fileNameAndExt, currentPath string) (foundCommand models.
 		filePathToCheck := path.Join(pathPrefix, dirPathToCheck, fileNameAndExt)
 
 		//File exists (and can be accessed)
-		if _, statErr := FileStat(filePathToCheck); statErr == nil {
+		if _, statErr := internal.FileStat(filePathToCheck); statErr == nil {
 			command, templatePath, commandFound, searchErr = searchFileForCommand(filePathToCheck, commandName)
 
 			if searchErr != nil {
@@ -56,7 +57,7 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 	emptyCommand := models.Command{}
 	containingDir, _ := path.Split(filePath)
 
-	fileBytes, fileErr := ReadFile(filePath)
+	fileBytes, fileErr := internal.ReadFile(filePath)
 	if fileErr != nil {
 		return emptyCommand, "", false, fileErr
 	}
@@ -86,7 +87,7 @@ func searchFileForCommand(filePath, commandName string) (command models.Command,
 	for _, childPath := range scaffFile.Children {
 		fullChildPath := path.Join(containingDir, childPath)
 
-		if _, childPathErr := FileStat(fullChildPath); childPathErr != nil {
+		if _, childPathErr := internal.FileStat(fullChildPath); childPathErr != nil {
 			childFindErr := &customerrors.ValidationError{
 				Message: fmt.Sprintf("unable to locate child scaff file at path: '%s'", fullChildPath),
 			}

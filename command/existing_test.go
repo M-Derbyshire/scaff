@@ -7,6 +7,7 @@ import (
 	"slices"
 
 	"github.com/M-Derbyshire/scaff/command"
+	"github.com/M-Derbyshire/scaff/command/internal"
 	"github.com/M-Derbyshire/scaff/mocks"
 	"github.com/M-Derbyshire/scaff/models"
 )
@@ -21,7 +22,7 @@ func TestIdentifyExistingPathsWillReturnExistingPaths(t *testing.T) {
 		mocks.CreateMockInfo(filepath.Join(workingDirectory, "my_dir2"), true),
 	}
 
-	command.FileStat = mocks.GetFileStat(files)
+	internal.FileStat = mocks.GetFileStat(files)
 
 	testCommand := models.Command{
 		Name:                  "test",
@@ -80,7 +81,7 @@ func TestIdentifyExistingPathsWillNotReturnNonExistantPaths(t *testing.T) {
 		filepath.Join(workingDirectory, "my_dir4"),
 	}
 
-	command.FileStat = mocks.GetFileStat(existingFiles)
+	internal.FileStat = mocks.GetFileStat(existingFiles)
 
 	// Has a mixture of existing and non-existing files/directories
 	testCommand := models.Command{
@@ -140,7 +141,7 @@ func TestIdentifyExistingPathsWillNotReturnNonExistantPaths(t *testing.T) {
 func TestIdentifyExistingPathsWillReturnEmptySliceIfNoExistingPaths(t *testing.T) {
 	workingDirectory := "C:/project"
 
-	command.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{})
+	internal.FileStat = mocks.GetFileStat([]mocks.MockFileInfo{})
 
 	testCommand := models.Command{
 		Name:                  "test",
@@ -189,7 +190,7 @@ func TestIdentifyExistingPathsWillPopulatePathNamesUsingGivenVars(t *testing.T) 
 		mocks.CreateMockInfo(filepath.Join(workingDirectory, "my_dirs_text_dir"), true),
 	}
 
-	command.FileStat = mocks.GetFileStat(files)
+	internal.FileStat = mocks.GetFileStat(files)
 
 	testCommand := models.Command{
 		Name:                  "test",
@@ -235,7 +236,7 @@ func TestIdentifyExistingPathsWillNotCheckPathsWithinInnerDirectories(t *testing
 		mocks.CreateMockInfo(filepath.Join(workingDirectory, "my_dir", "my_inner_file.txt"), false),
 	}
 
-	command.FileStat = mocks.GetFileStat(append(rootFiles, innerFiles...))
+	internal.FileStat = mocks.GetFileStat(append(rootFiles, innerFiles...))
 
 	testCommand := models.Command{
 		Name:                  "test",

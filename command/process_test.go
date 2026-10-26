@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/command"
+	"github.com/M-Derbyshire/scaff/command/internal"
 	"github.com/M-Derbyshire/scaff/models"
 )
 
@@ -55,11 +56,11 @@ var processTestCommand models.Command = models.Command{
 
 // setup anything that's required before each individual test
 func processBeforeEach() {
-	command.CreateFile = func(_ models.FileScaffold, _, _ string, _ map[string]string) error {
+	internal.CreateFile = func(_ models.FileScaffold, _, _ string, _ map[string]string) error {
 		return nil
 	}
 
-	command.CreateDirectory = func(_ models.DirectoryScaffold, _, _ string, _ map[string]string) error {
+	internal.CreateDirectory = func(_ models.DirectoryScaffold, _, _ string, _ map[string]string) error {
 		return nil
 	}
 }
@@ -76,7 +77,7 @@ func TestProcessWillCreateAllFilesInTheCommand(t *testing.T) {
 	// We're going to mock the CreateFile function, and have it populate a slice of calls with the data it's called with
 	mockCalls := make([]mockCreateCall, 0, len(processTestCommand.Files))
 
-	command.CreateFile = func(file models.FileScaffold, parentDirectoryPath, templatesDirectoryPath string, vars map[string]string) error {
+	internal.CreateFile = func(file models.FileScaffold, parentDirectoryPath, templatesDirectoryPath string, vars map[string]string) error {
 		mockCalls = append(mockCalls, mockCreateCall{
 			File:         file,
 			ParentDir:    parentDirectoryPath,
@@ -140,7 +141,7 @@ func TestProcessWillReturnAnErrorIfThereWasAnErrorCreatingAFile(t *testing.T) {
 	processBeforeEach()
 
 	expectedErrorText := "my test file error"
-	command.CreateFile = func(_ models.FileScaffold, _, _ string, _ map[string]string) error {
+	internal.CreateFile = func(_ models.FileScaffold, _, _ string, _ map[string]string) error {
 		return errors.New(expectedErrorText)
 	}
 
@@ -169,7 +170,7 @@ func TestProcessWillCreateAllDirectoriesInTheCommand(t *testing.T) {
 	// We're going to mock the CreateDirectory function, and have it populate a slice of calls with the data it's called with
 	mockCalls := make([]mockCreateCall, 0, len(processTestCommand.Directories))
 
-	command.CreateDirectory = func(directory models.DirectoryScaffold, parentDirectoryPath, templatesDirectoryPath string, vars map[string]string) error {
+	internal.CreateDirectory = func(directory models.DirectoryScaffold, parentDirectoryPath, templatesDirectoryPath string, vars map[string]string) error {
 		mockCalls = append(mockCalls, mockCreateCall{
 			Directory:    directory,
 			ParentDir:    parentDirectoryPath,
@@ -237,7 +238,7 @@ func TestProcessWillReturnAnErrorIfThereWasAnErrorCreatingADirectory(t *testing.
 	processBeforeEach()
 
 	expectedErrorText := "my test dir error"
-	command.CreateDirectory = func(_ models.DirectoryScaffold, _, _ string, _ map[string]string) error {
+	internal.CreateDirectory = func(_ models.DirectoryScaffold, _, _ string, _ map[string]string) error {
 		return errors.New(expectedErrorText)
 	}
 
