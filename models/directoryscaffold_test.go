@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/models"
+	"github.com/M-Derbyshire/scaff/models/internal"
 )
 
 func TestDirectoryScaffoldValidateShouldReturnErrorIfEmptyName(t *testing.T) {
@@ -113,7 +114,7 @@ func TestDirectoryScaffoldValidateShouldReturnErrorsFromInnerFilesAndDirectories
 		"directory scaffold objects should have a 'name' property that is set to a non-empty value",
 	}
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -172,7 +173,7 @@ func TestDirectoryScaffoldValidateShouldPassCorrectTemplateDirectoryPathToInnerF
 	templatePath := "/my_templates/test.txt"
 	expectedFullPath := fmt.Sprintf("%s%s", templateDirPath, templatePath)
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		if filepath == expectedFullPath {
 			return nil, nil
 		}
@@ -211,7 +212,7 @@ func TestDirectoryScaffoldValidateShouldReturnMultipleErrors(t *testing.T) {
 		"directory scaffold objects should have a 'name' property that is set to a non-empty value",
 	}
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -248,7 +249,7 @@ func TestDirectoryScaffoldValidateShouldReturnMultipleErrors(t *testing.T) {
 }
 
 func TestDirectoryScaffoldValidateShouldNotReturnErrorsWhenValid(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 

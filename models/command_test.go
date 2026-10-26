@@ -7,10 +7,11 @@ import (
 
 	"github.com/M-Derbyshire/scaff/customerrors"
 	"github.com/M-Derbyshire/scaff/models"
+	"github.com/M-Derbyshire/scaff/models/internal"
 )
 
 func TestCommandValidateShouldReturnNoErrorsIfValid(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -40,7 +41,7 @@ func TestCommandValidateShouldReturnNoErrorsIfValid(t *testing.T) {
 }
 
 func TestCommandValidateShouldReturnErrorIfEmptyTemplateDirectoryPath(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -76,7 +77,7 @@ func TestCommandValidateShouldReturnErrorIfEmptyTemplateDirectoryPath(t *testing
 }
 
 func TestCommandValidateShouldReturnErrorIfTemplateDirectoryPathNotSet(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -111,7 +112,7 @@ func TestCommandValidateShouldReturnErrorIfTemplateDirectoryPathNotSet(t *testin
 }
 
 func TestCommandValidateShouldReturnErrorIfTemplateDirectoryPathSetToOnlyWhitespace(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -167,7 +168,7 @@ func TestCommandValidateShouldNotErrorIfNoFiles(t *testing.T) {
 }
 
 func TestCommandValidateShouldNotErrorIfNoDirectories(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -192,7 +193,7 @@ func TestCommandValidateShouldNotErrorIfNoDirectories(t *testing.T) {
 }
 
 func TestCommandValidateShouldCallValidateOnAllFiles(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -240,7 +241,7 @@ func TestCommandValidateShouldCallValidateOnAllFiles(t *testing.T) {
 }
 
 func TestCommandValidateShouldCallValidateOnAllDirectories(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -293,7 +294,7 @@ func TestCommandValidateShouldCallValidateOnAllDirectories(t *testing.T) {
 }
 
 func TestCommandValidateShouldReturnMultipleErrors(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 

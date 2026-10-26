@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/M-Derbyshire/scaff/customerrors"
+	"github.com/M-Derbyshire/scaff/models/internal"
 )
 
 // FileScaffold represents a file to be created
@@ -48,7 +49,7 @@ func (fs *FileScaffold) Validate(templateDirectoryPath string) []customerrors.Va
 		// We want to confirm that the template file exists
 		fullTemplatePath := fs.GetFullTemplatePath(templateDirectoryPath)
 
-		if _, pathErr := FileStat(fullTemplatePath); pathErr != nil {
+		if _, pathErr := internal.FileStat(fullTemplatePath); pathErr != nil {
 			newErr := customerrors.ValidationError{
 				Message: fmt.Sprintf("unable to locate template file at path: '%s'", fullTemplatePath),
 			}

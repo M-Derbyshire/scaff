@@ -8,12 +8,13 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/models"
+	"github.com/M-Derbyshire/scaff/models/internal"
 )
 
 func TestFileScaffoldValidateWillReturnErrorIfEmptyName(t *testing.T) {
 	expectedErr := "file scaffold objects should have a 'name' property that is set to a non-empty value"
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -38,7 +39,7 @@ func TestFileScaffoldValidateWillReturnErrorIfEmptyName(t *testing.T) {
 func TestFileScaffoldValidateWillReturnErrorIfNameUndefined(t *testing.T) {
 	expectedErr := "file scaffold objects should have a 'name' property that is set to a non-empty value"
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -62,7 +63,7 @@ func TestFileScaffoldValidateWillReturnErrorIfNameUndefined(t *testing.T) {
 func TestFileScaffoldValidateWillReturnErrorIfNameIsOnlyWhitespace(t *testing.T) {
 	expectedErr := "file scaffold objects should have a 'name' property that is set to a non-empty value"
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -87,7 +88,7 @@ func TestFileScaffoldValidateWillReturnErrorIfNameIsOnlyWhitespace(t *testing.T)
 func TestFileScaffoldValidateWillReturnErrorIfTemplatePathUndefined(t *testing.T) {
 	expectedErr := "file scaffold objects should have a 'templatePath' property that is set to a non-empty value"
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -112,7 +113,7 @@ func TestFileScaffoldValidateWillReturnErrorIfTemplatePathUndefined(t *testing.T
 func TestFileScaffoldValidateWillReturnErrorIfEmptyTemplatePath(t *testing.T) {
 	expectedErr := "file scaffold objects should have a 'templatePath' property that is set to a non-empty value"
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -138,7 +139,7 @@ func TestFileScaffoldValidateWillReturnErrorIfEmptyTemplatePath(t *testing.T) {
 func TestFileScaffoldValidateWillReturnErrorIfTemplatePathIsOnlyWhitespace(t *testing.T) {
 	expectedErr := "file scaffold objects should have a 'templatePath' property that is set to a non-empty value"
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -168,7 +169,7 @@ func TestFileScaffoldValidateWillReturnErrorIfTemplatePathDoesntExist(t *testing
 
 	expectedErr := fmt.Sprintf("unable to locate template file at path: '%s'", absTemplatePath)
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		if filepath == absTemplatePath {
 			return nil, errors.New("doesn't exist")
 		}
@@ -197,7 +198,7 @@ func TestFileScaffoldValidateWillReturnErrorIfTemplatePathDoesntExist(t *testing
 func TestFileScaffoldValidateWillNotReturnFileNotFoundErrorForTemplatePathIfPathIsInvalid(t *testing.T) {
 	expectedErr := "file scaffold objects should have a 'templatePath' property that is set to a non-empty value"
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, errors.New("doesn't exist")
 	}
 
@@ -226,7 +227,7 @@ func TestFileScaffoldValidateWillReturnMultipleErrors(t *testing.T) {
 		"file scaffold objects should have a 'templatePath' property that is set to a non-empty value",
 	}
 
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
@@ -252,7 +253,7 @@ func TestFileScaffoldValidateWillReturnMultipleErrors(t *testing.T) {
 }
 
 func TestFileScaffoldValidateWillNotReturnErrorsIfValid(t *testing.T) {
-	models.FileStat = func(filepath string) (fs.FileInfo, error) {
+	internal.FileStat = func(filepath string) (fs.FileInfo, error) {
 		return nil, nil
 	}
 
