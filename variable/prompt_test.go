@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/M-Derbyshire/scaff/variable"
+	"github.com/M-Derbyshire/scaff/variable/internal"
 )
 
 func setupMockStdIn(inputText string) error {
@@ -26,7 +27,7 @@ func setupMockStdIn(inputText string) error {
 	writeToFile.Close()
 
 	// Set the Stdin
-	variable.Stdin = readToFile
+	internal.Stdin = readToFile
 	return nil
 }
 
@@ -50,13 +51,13 @@ func TestPromptWillReturnEnteredStringFromStdin(t *testing.T) {
 }
 
 func TestPromptWillPrintPromptTextWithGivenVariableName(t *testing.T) {
-	originalPrintF := variable.PrintFormatted
-	defer func() { variable.PrintFormatted = originalPrintF }()
+	originalPrintF := internal.PrintFormatted
+	defer func() { internal.PrintFormatted = originalPrintF }()
 
 	// Mock the PrintFormatted
 	var resultFormatStr string
 	var resultValues []any
-	variable.PrintFormatted = func(format string, a ...any) (n int, err error) {
+	internal.PrintFormatted = func(format string, a ...any) (n int, err error) {
 		resultFormatStr = format
 		resultValues = a
 		return 0, nil

@@ -2,24 +2,17 @@ package variable
 
 import (
 	"bufio"
-	"fmt"
-	"os"
 	"strings"
-)
 
-var (
-	// Stdin is an open file, pointing to the standard input
-	Stdin = os.Stdin
-	// PrintFormatted is used to print a formatted string to standard output
-	PrintFormatted = fmt.Printf
+	"github.com/M-Derbyshire/scaff/variable/internal"
 )
 
 // Prompt prompts the user for the value for a user variable (will always be treated as a string).
 // Returns the given value (empty strings are considered valid)
 func Prompt(varName string) (string, error) {
-	PrintFormatted("variable value required for '%s' > ", varName)
+	internal.PrintFormatted("variable value required for '%s' > ", varName)
 
-	inReader := bufio.NewReader(Stdin)
+	inReader := bufio.NewReader(internal.Stdin)
 	input, err := inReader.ReadString('\n')
 	if err != nil {
 		return "", err
